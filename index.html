@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Joe Zhuo's projects and experience, charted as a crystal constellation." />
+    <meta name="theme-color" content="#000000" />
+    <title>Joe Zhuo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="is-loading">
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <canvas id="dust" aria-hidden="true"></canvas>
+
+    <div id="loader" class="screen">
+      <svg class="gem" viewBox="0 0 120 160" aria-hidden="true">
+        <path d="M60 6 L104 52 L60 154 L16 52 Z" />
+        <path d="M16 52 L104 52 M60 6 L42 52 L60 154 M60 6 L78 52 L60 154" />
+      </svg>
+      <p class="mono"><span id="loader-count">000</span> / 100</p>
+      <p class="mono dim">Growing the lattice</p>
+    </div>
+
+    <main id="title" class="screen" hidden>
+      <div class="title-name">
+        <p class="mono eyebrow">A constellation in eighteen stars</p>
+        <h1>Joe<br /><em>Zhuo</em></h1>
+      </div>
+      <p class="lede">Computer engineer<br />Builder of fast things</p>
+      <div class="title-start">
+        <button id="begin" class="cta" data-hover><span>Begin experience</span></button>
+        <p class="mono dim">Sound on for the full sky</p>
+      </div>
+    </main>
+
+    <div id="warp" class="screen" hidden>
+      <div class="orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="mono"><span id="warp-count">00</span>%</p>
+      <p class="mono dim" id="warp-text">Aligning stars</p>
+    </div>
+
+    <div id="hud" hidden>
+      <header>
+        <span class="mono brand">Joe Zhuo</span>
+        <button id="sound" class="mono ghost" data-hover aria-pressed="true">Sound on</button>
+      </header>
+      <nav id="index" aria-label="Stars"></nav>
+      <div id="card" role="tooltip" aria-hidden="true">
+        <p class="mono card-kind"></p>
+        <p class="card-title"></p>
+        <p class="card-tag"></p>
+        <p class="mono card-cta"></p>
+      </div>
+      <div id="hint">
+        <span class="hint-line" aria-hidden="true"></span>
+        <p class="mono" aria-live="polite"><span id="hint-text"></span></p>
+        <button id="fly" class="mono ghost" data-hover>Or begin the descent</button>
+      </div>
+    </div>
+
+    <aside id="panel" role="dialog" aria-labelledby="panel-title" hidden>
+      <header>
+        <div class="panel-top">
+          <p class="mono" id="panel-kind"></p>
+          <button id="panel-close" class="mono ghost" data-hover aria-label="Close panel">Close ✕</button>
+        </div>
+        <h2 id="panel-title" tabindex="-1"></h2>
+        <p class="mono dim" id="panel-meta"></p>
+        <ul id="panel-links"></ul>
+      </header>
+      <div id="panel-body"></div>
+      <footer>
+        <button id="prev" class="mono ghost" data-hover aria-label="Previous star">← Prev</button>
+        <span class="mono dim" id="panel-count"></span>
+        <button id="next" class="mono ghost" data-hover aria-label="Next star">Next →</button>
+      </footer>
+    </aside>
+
+    <div class="cursor" aria-hidden="true"></div>
+    <div class="cursor-ring" aria-hidden="true"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
