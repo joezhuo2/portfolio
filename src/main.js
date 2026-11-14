@@ -566,6 +566,7 @@ addEventListener('pointermove', (e) => {
       vy: (Math.random() - 0.5) * 34 + 12,
       life: 1,
       size: 0.4 + Math.random() * 1.3,
+      rgb: Math.random() < 0.2 ? '127,233,255' : '255,255,255',
     })
   }
 })
@@ -616,7 +617,7 @@ $('sound').addEventListener('click', (e) => {
         { opacity: 0, transform: 'translateY(6px)' },
         { opacity: 1, transform: 'none' },
       ],
-      { duration: 450, easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)' },
+      { duration: 900, easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)' },
     )
   setMuted(!on)
   if (on) {
@@ -664,7 +665,7 @@ function drawDust(dt) {
     }
     m.x += m.vx * dt
     m.y += m.vy * dt
-    dustCtx.fillStyle = `rgba(255,255,255,${m.life * 0.85})`
+    dustCtx.fillStyle = `rgba(${m.rgb},${m.life * 0.85})`
     dustCtx.beginPath()
     dustCtx.arc(m.x, m.y, m.size * (0.5 + m.life * 0.5), 0, Math.PI * 2)
     dustCtx.fill()
