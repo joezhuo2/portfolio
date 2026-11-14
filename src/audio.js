@@ -79,7 +79,7 @@ const glitter = (count, span, rising) => {
 
 export const sfx = {
   tick: () => bell(3136, { dur: 0.12, vol: 0.03, partials: [1, 2.4] }),
-  hover: (i) => bell(SCALE[i % SCALE.length] * 2 ** Math.floor(i / SCALE.length), { dur: 0.6, vol: 0.07 }),
+  hover: (i) => bell(SCALE[i % SCALE.length] * 2 ** (Math.floor(i / SCALE.length) % 3), { dur: 0.6, vol: 0.07 }),
   open: (i) => {
     const f = SCALE[i % SCALE.length]
     bell(f / 2, { dur: 1.6, vol: 0.12 })

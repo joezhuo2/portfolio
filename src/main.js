@@ -157,7 +157,7 @@ const lines = new THREE.LineSegments(
 )
 lattice.add(lines)
 
-const SIZES = [0, 5.5, 9, 14]
+const SIZES = [3.6, 5.5, 9, 14]
 const nodes = stars.map((star, i) => {
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, ...additive }))
   sprite.position.copy(at(star.slot))
@@ -230,7 +230,7 @@ function pick(x, y, slack = 1) {
     const p = screenOf(i)
     if (p.z > 1) continue
     const d = Math.hypot(p.x - x, p.y - y)
-    if (d < (14 + stars[i].size * 8) * slack && d < bestD) {
+    if (d < (16 + stars[i].size * 7) * slack && d < bestD) {
       best = i
       bestD = d
     }

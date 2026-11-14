@@ -52,6 +52,18 @@ for (let i = 0; i < 5; i++) {
   )
 }
 
+const HUB = GIRDLE + 2
+const MOONS = [
+  [4.5, 2.5, 1.5],
+  [-3, 4, 2.5],
+  [1.5, -4.5, 3],
+  [-4.5, -1.5, -2.5],
+  [2.5, 3, -4.5],
+  [-1, -3.5, -4.5],
+]
+const FIRST_MOON = positions.length
+for (const moon of MOONS) positions.push(positions[HUB].map((v, i) => v + moon[i]))
+
 const degree = positions.map(() => 0)
 for (const [a, b] of full) {
   degree[a]++
@@ -75,4 +87,5 @@ export const edges = full
     [SHARD_BACK, CROWN + 3],
     [SHARD_BACK, CROWN + 2],
     [SHARD_BACK, GIRDLE + 3],
+    ...MOONS.map((_, i) => [HUB, FIRST_MOON + i]),
   ])
