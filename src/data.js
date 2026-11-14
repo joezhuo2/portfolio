@@ -360,7 +360,7 @@ export const stars = [
     size: 2,
     tagline: 'Looking for a summer 2027 co-op. Send a signal.',
     links: [
-      { label: 'Email', href: 'mailto:j5zhuo@uwaterloo.ca' },
+      { label: 'Email', href: 'mailto:joezhuo08@gmail.com' },
       { label: 'LinkedIn', href: 'https://www.linkedin.com/in/joe-zhuo' },
       { label: 'GitHub', href: 'https://github.com/joezhuo2' },
     ],
@@ -368,6 +368,6 @@ export const stars = [
       'I am looking for a software engineering co-op from May to September 2027, ideally close to GPUs, inference, compilers or performance work.',
       'If something on this map caught your eye, I would like to hear about it.',
     ],
-    facts: ['j5zhuo@uwaterloo.ca', 'linkedin.com/in/joe-zhuo', 'github.com/joezhuo2'],
+    facts: ['joezhuo08@gmail.com', 'linkedin.com/in/joe-zhuo', 'github.com/joezhuo2'],
   },
 ]
