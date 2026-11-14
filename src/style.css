@@ -100,33 +100,8 @@ button {
   opacity: 1;
 }
 
-#loader,
-#warp {
-  background: #000;
-}
-
 #warp {
   background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.55), #000 70%);
-}
-
-.gem {
-  width: 84px;
-  height: 112px;
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 0.8;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 10px rgba(127, 233, 255, 0.55));
-}
-
-.gem path {
-  stroke-dasharray: 620;
-  stroke-dashoffset: calc(620 - 620 * var(--p, 0));
-}
-
-.gem path + path {
-  stroke: var(--accent);
-  stroke-width: 0.5;
 }
 
 #title {
@@ -195,10 +170,16 @@ button {
 }
 
 #title.show > :nth-child(2) {
-  transition-delay: 0.3s;
+  transition-delay: 0.22s;
 }
+
 #title.show > :nth-child(3) {
-  transition-delay: 0.6s;
+  transition-delay: 0.45s;
+}
+
+body.is-intro #title.show > :nth-child(3),
+body.is-intro #top {
+  transition-delay: 1.9s;
 }
 
 .cta {
@@ -299,13 +280,17 @@ button {
   padding: 1.4rem clamp(1.2rem, 3vw, 2.4rem);
   visibility: hidden;
   opacity: 0;
-  transition: opacity 1.2s ease;
+  transform: translateY(18px);
+  transition:
+    opacity 1.2s var(--ease),
+    transform 1.2s var(--ease);
 }
 
 body.is-title #top,
 body.is-live #top {
   visibility: visible;
   opacity: 1;
+  transform: none;
 }
 
 body.is-title #home {

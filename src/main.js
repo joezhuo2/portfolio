@@ -110,9 +110,9 @@ function field(count, size, opacity, min, max, tex = dotTex) {
   const geometry = new THREE.BufferGeometry().setFromPoints(pts)
   const tints = new Float32Array(count * 3)
   for (let i = 0; i < count; i++) {
-    const cool = Math.random() ** 2
-    const lum = 0.55 + Math.random() * 0.45
-    tints.set([lum * (1 - cool * 0.5), lum * (1 - cool * 0.15), lum], i * 3)
+    const cool = Math.random() ** 3
+    const lum = 0.6 + Math.random() * 0.4
+    tints.set([lum * (1 - cool * 0.3), lum * (1 - cool * 0.1), lum], i * 3)
   }
   geometry.setAttribute('color', new THREE.BufferAttribute(tints, 3))
   return new THREE.Points(geometry, new THREE.PointsMaterial({ map: tex, size, opacity, vertexColors: true, ...additive }))
@@ -128,7 +128,12 @@ function sheet(tex, w, h, color, opacity, min, max, roll) {
 }
 
 const sky = new THREE.Group()
-sky.add(field(1500, 4.5, 0.8, 500, 1500), field(150, 11, 0.95, 500, 1500), field(26, 26, 1, 600, 1500))
+sky.add(
+  field(3200, 4, 0.85, 500, 1500),
+  field(700, 7, 0.9, 500, 1500),
+  field(220, 12, 1, 500, 1500),
+  field(40, 26, 1, 600, 1500),
+)
 for (let i = 0; i < 12; i++) {
   const tint = i % 3 === 0 ? 0x3f8fb5 : 0x27405e
   sky.add(sheet(cloudTex, 1700, 1700, tint, 0.35 + Math.random() * 0.3, 1600, 2000, Math.random() * 6))
@@ -142,7 +147,8 @@ scene.add(sky)
 
 const lattice = new THREE.Group()
 scene.add(lattice)
-lattice.add(field(110, 0.6, 0.6, 6, 48))
+const motesNear = field(110, 0.6, 0, 6, 48)
+lattice.add(motesNear)
 
 const at = (i) => new THREE.Vector3().fromArray(positions[i])
 const lines = new THREE.LineSegments(
@@ -156,7 +162,7 @@ const nodes = stars.map((star, i) => {
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, ...additive }))
   sprite.position.copy(at(i))
   lattice.add(sprite)
-  return { sprite, base: SIZES[star.size], grow: 0 }
+  return { sprite, base: SIZES[star.size], grow: 0, fade: 1 }
 })
 
 const marker = new THREE.Sprite(new THREE.SpriteMaterial({ map: ringTex, color: ACCENT, opacity: 0, ...additive }))
@@ -174,6 +180,8 @@ let selected = -1
 let near = false
 let uiHover = false
 let speed = 5
+let intro = 0
+let introGoal = 0
 let arrive = 64
 let nearR = 96
 let farR = 270
@@ -588,16 +596,19 @@ function frame(now) {
     }
   }
 
+  intro += (introGoal - intro) * damp(dt, 2.2)
+  lattice.position.y = (intro - 1) * 14
+  motesNear.material.opacity = 0.6 * intro
   const kg = damp(dt, 9)
   nodes.forEach((node, i) => {
     const active = i === hovered || i === selected
     node.grow += ((active ? 1 : 0) - node.grow) * kg
     const twinkle = 1 + Math.sin(t * 1.7 + i * 2.1) * 0.07
     node.sprite.scale.setScalar(node.base * (1 + node.grow * 0.55) * twinkle)
-    const dim = selected >= 0 && !active ? 0.4 : 1
-    node.sprite.material.opacity += (dim - node.sprite.material.opacity) * kg
+    node.fade += ((selected >= 0 && !active ? 0.4 : 1) - node.fade) * kg
+    node.sprite.material.opacity = node.fade * intro
   })
-  lines.material.opacity = 0.1 + 0.3 * (1 - smoothstep(view.r, arrive, farR))
+  lines.material.opacity = (0.1 + 0.3 * (1 - smoothstep(view.r, arrive, farR))) * intro
 
   const lit = hovered >= 0 ? hovered : selected
   marker.material.opacity += ((lit >= 0 ? 0.9 : 0) - marker.material.opacity) * kg
@@ -632,20 +643,14 @@ function countUp(target, ms, pad, onStep) {
 }
 
 async function boot() {
-  const loader = $('loader')
-  const gem = loader.querySelector('.gem')
-  reveal(loader)
-  await Promise.all([
-    Promise.race([document.fonts.ready, wait(4000)]),
-    countUp($('loader-count'), reduced ? 600 : 2600, 3, (p) => gem.style.setProperty('--p', p)),
-  ])
-  await wait(400)
-  loader.classList.remove('show')
-  body.classList.replace('is-loading', 'is-title')
+  await Promise.race([document.fonts.ready, wait(1500)])
+  body.classList.add('is-title', 'is-intro')
   reveal($('title'))
   mode = 'title'
-  await wait(900)
-  loader.hidden = true
+  await wait(reduced ? 0 : 800)
+  introGoal = 1
+  await wait(3200)
+  body.classList.remove('is-intro')
 }
 
 $('begin').addEventListener('click', async () => {
