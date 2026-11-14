@@ -71,27 +71,15 @@ const dotTex = texture(64, 64, (g, w) => {
   g.fillRect(0, 0, w, w)
 })
 
-const ARC_EDGE = 0.8
-const arcTex = texture(1024, 1024, (g, w) => {
-  const c = w / 2
-  const rim = g.createRadialGradient(c, c, 0, c, c, c)
-  rim.addColorStop(0, 'rgba(0,0,0,0)')
-  rim.addColorStop(ARC_EDGE - 0.012, 'rgba(0,0,0,0)')
-  rim.addColorStop(ARC_EDGE, 'rgba(255,255,255,1)')
-  rim.addColorStop(ARC_EDGE + 0.02, 'rgba(190,238,255,0.6)')
-  rim.addColorStop(ARC_EDGE + 0.08, 'rgba(120,205,245,0.28)')
-  rim.addColorStop(ARC_EDGE + 0.15, 'rgba(80,150,210,0.1)')
-  rim.addColorStop(1, 'rgba(0,0,0,0)')
-  g.fillStyle = rim
-  g.fillRect(0, 0, w, w)
-  g.globalCompositeOperation = 'destination-in'
-  const y = c - c * ARC_EDGE
-  const mask = g.createRadialGradient(c, y, 0, c, y, w * 0.5)
-  mask.addColorStop(0, 'rgba(0,0,0,1)')
-  mask.addColorStop(0.45, 'rgba(0,0,0,0.6)')
-  mask.addColorStop(1, 'rgba(0,0,0,0)')
-  g.fillStyle = mask
-  g.fillRect(0, 0, w, w)
+const streakTex = texture(512, 64, (g, w, h) => {
+  g.translate(w / 2, h / 2)
+  g.scale(w / h, 1)
+  const s = g.createRadialGradient(0, 0, 0, 0, 0, h / 2)
+  s.addColorStop(0, 'rgba(255,255,255,0.9)')
+  s.addColorStop(0.25, 'rgba(255,255,255,0.28)')
+  s.addColorStop(1, 'rgba(255,255,255,0)')
+  g.fillStyle = s
+  g.fillRect(-h / 2, -h / 2, h, h)
 })
 
 const cloudTex = texture(256, 256, (g, w) => {
@@ -130,27 +118,6 @@ function field(count, size, opacity, min, max, tex = dotTex) {
   return new THREE.Points(geometry, new THREE.PointsMaterial({ map: tex, size, opacity, vertexColors: true, ...additive }))
 }
 
-const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5
-
-function arc(direction, size, roll, opacity) {
-  const glow = new THREE.Mesh(
-    new THREE.PlaneGeometry(1, 1),
-    new THREE.MeshBasicMaterial({ map: arcTex, opacity, side: THREE.DoubleSide, ...additive }),
-  )
-  const grains = Array.from({ length: 3400 }, () => {
-    const a = Math.PI / 2 + gauss() * 0.75
-    const r = (ARC_EDGE / 2) * (1 + Math.abs(gauss()) * 0.15 - Math.random() * 0.012)
-    return new THREE.Vector3(Math.cos(a) * r, Math.sin(a) * r, 0)
-  })
-  const dustMaterial = new THREE.PointsMaterial({ map: dotTex, size: 6, opacity: opacity * 0.9, ...additive })
-  glow.add(new THREE.Points(new THREE.BufferGeometry().setFromPoints(grains), dustMaterial))
-  glow.position.copy(direction).setLength(1900)
-  glow.lookAt(0, 0, 0)
-  glow.rotateZ(roll)
-  glow.scale.setScalar(size)
-  return glow
-}
-
 function sheet(tex, w, h, color, opacity, min, max, roll) {
   const material = new THREE.MeshBasicMaterial({ map: tex, color, opacity, side: THREE.DoubleSide, ...additive })
   const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), material)
@@ -166,11 +133,11 @@ for (let i = 0; i < 12; i++) {
   const tint = i % 3 === 0 ? 0x3f8fb5 : 0x27405e
   sky.add(sheet(cloudTex, 1700, 1700, tint, 0.35 + Math.random() * 0.3, 1600, 2000, Math.random() * 6))
 }
-sky.add(
-  arc(new THREE.Vector3(-0.3, -0.75, 0.6), 3600, 0.5, 1),
-  arc(new THREE.Vector3(0.7, 0.5, -0.5), 2600, 2.4, 0.5),
-  arc(new THREE.Vector3(-0.6, 0.3, -0.75), 2200, 4.2, 0.35),
-)
+const band = Math.random() * Math.PI
+for (let i = 0; i < 9; i++) {
+  const w = 1400 + Math.random() * 1600
+  sky.add(sheet(streakTex, w, 80 + Math.random() * 130, 0x38d8ff, 0.3 + Math.random() * 0.3, 1500, 1900, band + (Math.random() - 0.5) * 0.7))
+}
 scene.add(sky)
 
 const lattice = new THREE.Group()
@@ -507,7 +474,27 @@ $('sound').addEventListener('click', (e) => {
   e.currentTarget.setAttribute('aria-pressed', on)
   e.currentTarget.textContent = on ? 'Sound on' : 'Sound off'
   setMuted(!on)
-  if (on) sfx.unmute()
+  if (on) {
+    initAudio()
+    sfx.unmute()
+  }
+})
+
+$('home').addEventListener('click', () => {
+  if (mode !== 'live') return
+  close()
+  setHover(-1)
+  mode = 'title'
+  near = false
+  goal.r = arrive * 2.1
+  speed = 2
+  body.classList.replace('is-live', 'is-title')
+  const hud = $('hud')
+  hud.classList.remove('show')
+  setTimeout(() => {
+    if (mode !== 'live') hud.hidden = true
+  }, 1400)
+  reveal($('title'))
 })
 
 $('index').append(
