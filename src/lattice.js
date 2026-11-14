@@ -9,21 +9,21 @@ const vary = (amount) => (rnd() - 0.5) * 2 * amount
 
 const ring = (y, r, offset) =>
   Array.from({ length: 5 }, (_, i) => {
-    const a = offset + (i / 5) * Math.PI * 2 + vary(0.3)
-    const radius = r * (1 + vary(0.28))
-    return [Math.cos(a) * radius, y + vary(4.5), Math.sin(a) * radius]
+    const a = offset + (i / 5) * Math.PI * 2 + vary(0.44)
+    const radius = r * (1 + vary(0.4))
+    return [Math.cos(a) * radius, y + vary(6.5), Math.sin(a) * radius]
   })
 
 export const positions = [
-  [1.5, 1, -1.5],
-  [3.5, 24, -2.5],
+  [2.5, 1.5, -2],
+  [5, 24, -4],
   ...ring(11, 11, 0.2),
   ...ring(-1, 17, Math.PI / 5),
   ...ring(-13, 10, -0.15),
   [-13, -8, -5],
   [10.5, 6, -10.5],
   [-14, 6, -13],
-  [-4, -28, 3],
+  [-6, -27, 4.5],
 ]
 
 const CROWN = 2
@@ -60,7 +60,7 @@ for (const [a, b] of full) {
 
 export const edges = full
   .filter(([a, b]) => {
-    if (rnd() > 0.24 || degree[a] <= 3 || degree[b] <= 3) return true
+    if (rnd() > 0.32 || degree[a] <= 3 || degree[b] <= 3) return true
     degree[a]--
     degree[b]--
     return false

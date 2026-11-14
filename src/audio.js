@@ -91,12 +91,12 @@ export const sfx = {
     bell(1046.5, { at: 0.09, dur: 0.9, vol: 0.07 })
   },
   next: () => {
-    bell(1318.5, { dur: 0.35, vol: 0.06, partials: [1, 3.01] })
-    bell(1975.5, { at: 0.07, dur: 0.6, vol: 0.06, partials: [1, 3.01] })
+    bell(1318.5, { dur: 0.6, vol: 0.12 })
+    bell(1975.5, { at: 0.08, dur: 1.1, vol: 0.11 })
   },
   prev: () => {
-    bell(1975.5, { dur: 0.35, vol: 0.06, partials: [1, 3.01] })
-    bell(1318.5, { at: 0.07, dur: 0.6, vol: 0.06, partials: [1, 3.01] })
+    bell(1975.5, { dur: 0.6, vol: 0.12 })
+    bell(1318.5, { at: 0.08, dur: 1.1, vol: 0.11 })
   },
   begin: () => {
     ;[523.3, 784, 1046.5, 1568, 2093].forEach((f, i) => bell(f, { at: i * 0.09, dur: 2.6, vol: 0.09 }))
