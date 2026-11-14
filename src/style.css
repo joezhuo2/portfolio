@@ -744,7 +744,12 @@ body.is-title #home {
   transform: none;
 }
 
-#fly {
+#sound span {
+  display: inline-block;
+}
+
+#fly,
+#sound {
   border-bottom: 0;
   background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 0 1px;
   transition:
@@ -753,7 +758,9 @@ body.is-title #home {
 }
 
 #fly:hover,
-#fly:focus-visible {
+#fly:focus-visible,
+#sound:hover,
+#sound:focus-visible {
   background-size: 100% 1px;
 }
 
