@@ -53,6 +53,7 @@
     </div>
 
     <aside id="panel" role="dialog" aria-labelledby="panel-title" hidden>
+      <div id="panel-spot" aria-hidden="true"></div>
       <header>
         <div class="panel-top">
           <p class="mono" id="panel-kind"></p>
@@ -70,6 +71,16 @@
       </footer>
     </aside>
 
+    <svg class="defs" width="0" height="0" aria-hidden="true">
+      <filter id="lens-panel" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feImage x="0" y="0" preserveAspectRatio="none" result="map" />
+        <feDisplacementMap in="SourceGraphic" in2="map" scale="64" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <filter id="lens-card" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feImage x="0" y="0" preserveAspectRatio="none" result="map" />
+        <feDisplacementMap in="SourceGraphic" in2="map" scale="44" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
     <div class="cursor" aria-hidden="true"></div>
     <div class="cursor-ring" aria-hidden="true"></div>
     <script type="module" src="/src/main.js"></script>

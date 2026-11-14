@@ -253,6 +253,7 @@ function resize() {
   dustCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
 }
 addEventListener('resize', resize)
+addEventListener('resize', () => selected >= 0 && setLens(panel, 'lens-panel', 36))
 resize()
 
 const projected = new THREE.Vector3()
@@ -291,6 +292,7 @@ function setHover(i) {
     card.querySelector('.card-title').textContent = star.title
     card.querySelector('.card-tag').textContent = star.tagline
     card.querySelector('.card-cta').textContent = coarse ? 'Tap again to open' : 'Click to open'
+    setLens(card, 'lens-card', 22)
   }
   syncCursor()
   updateHint()
@@ -330,6 +332,40 @@ function updateHint() {
 }
 
 const el = (tag, text) => Object.assign(document.createElement(tag), { textContent: text })
+
+const lensSizes = {}
+function setLens(target, id, bezel) {
+  const w = target.offsetWidth
+  const h = target.offsetHeight
+  if (!w || !h || lensSizes[id] === `${w}x${h}`) return
+  lensSizes[id] = `${w}x${h}`
+  const map = document.createElement('canvas')
+  map.width = w
+  map.height = h
+  const g = map.getContext('2d')
+  const image = g.createImageData(w, h)
+  const bend = (at, size) => {
+    const edge = Math.min(at, size - 1 - at)
+    if (edge >= bezel) return 0
+    const pull = (1 - edge / bezel) ** 2
+    return at < size / 2 ? pull : -pull
+  }
+  for (let y = 0; y < h; y++) {
+    const gy = 128 + bend(y, h) * 127
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * 4
+      image.data[i] = 128 + bend(x, w) * 127
+      image.data[i + 1] = gy
+      image.data[i + 2] = 128
+      image.data[i + 3] = 255
+    }
+  }
+  g.putImageData(image, 0, 0)
+  const feImage = document.querySelector(`#${id} feImage`)
+  feImage.setAttribute('width', w)
+  feImage.setAttribute('height', h)
+  feImage.setAttribute('href', map.toDataURL())
+}
 
 function factItem(fact) {
   const href = /^\S+@\S+\.\S+$/.test(fact) ? `mailto:${fact}` : /^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(fact) ? `https://${fact}` : ''
@@ -384,6 +420,7 @@ function open(i, dir = 0) {
     sfx.open(selected)
     fillPanel()
     reveal(panel)
+    setLens(panel, 'lens-panel', 36)
     $('panel-title').focus({ preventScroll: true })
   } else {
     if (dir < 0) sfx.prev()
@@ -521,6 +558,13 @@ addEventListener('keydown', (e) => {
 $('prev').addEventListener('click', () => open(selected - 1, -1))
 $('next').addEventListener('click', () => open(selected + 1, 1))
 $('panel-close').addEventListener('click', close)
+panel.addEventListener('pointermove', (e) => {
+  const box = panel.getBoundingClientRect()
+  panel.style.setProperty('--mx', `${e.clientX - box.left}px`)
+  panel.style.setProperty('--my', `${e.clientY - box.top}px`)
+  panel.style.setProperty('--lit', 1)
+})
+panel.addEventListener('pointerleave', () => panel.style.setProperty('--lit', 0))
 
 fly.addEventListener('click', () => {
   goal.r = arrive
