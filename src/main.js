@@ -611,7 +611,6 @@ function frame(now) {
   }
 
   intro += (introGoal - intro) * damp(dt, 2.2)
-  lattice.position.y = (intro - 1) * 14
   motesNear.material.opacity = 0.6 * intro
   const kg = damp(dt, 9)
   nodes.forEach((node, i) => {
