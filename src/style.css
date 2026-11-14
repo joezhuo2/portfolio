@@ -639,14 +639,17 @@ body.is-title #home {
   color: var(--ink);
   border: 1px solid var(--line);
   clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+  background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 0 / 0 100%;
   transition:
-    background 0.3s,
-    color 0.3s;
+    background-size 0.5s var(--ease),
+    color 0.35s ease 0.1s,
+    border-color 0.35s;
 }
 
 #panel-links a:hover,
 #panel-links a:focus-visible {
-  background: var(--accent);
+  background-size: 100% 100%;
+  border-color: var(--accent);
   color: #000;
 }
 
