@@ -30,7 +30,7 @@ export const stars = [
     meta: 'C++20 · CUDA · cuBLAS',
     size: 3,
     tagline: 'A from-scratch GPU inference engine that outruns llama.cpp on a laptop.',
-    links: [gh('LLM-Inference-Engine')],
+    links: [gh('LLM-Inference-Engine'), { label: 'Live site', href: 'https://llm-inference-engine-jz.vercel.app/' }],
     body: [
       'A single-GPU LLM inference engine written from scratch in C++20 and CUDA. It serves a 1.1B-parameter model at 1,402 tokens per second with 16 concurrent requests on an RTX 5060 laptop GPU: 3.4x faster than HuggingFace and ahead of llama.cpp at 1,154.',
       'Speed never bought a wrong answer. Every optimized kernel is checked against a naive oracle, and all 16 concurrent requests stay token-identical to running each one alone, even when memory fills and requests are paused.',
@@ -87,7 +87,7 @@ export const stars = [
     meta: 'C# · Roslyn · .NET',
     size: 2,
     tagline: 'A Roslyn analyzer that finds hidden per-frame allocations and fixes them in one click.',
-    links: [gh('ObjectPoolLinter')],
+    links: [gh('ObjectPoolLinter'), { label: 'NuGet', href: 'https://www.nuget.org/packages/ObjectPoolLinter' }],
     body: [
       'The memory fixes in Anamnesis, automated. A Roslyn analyzer for Unity that flags hidden per-frame allocations in update code and the helpers it calls, with paired code fixes that rewrite them to pools and cached forms.',
     ],
@@ -159,7 +159,7 @@ export const stars = [
     meta: 'BioHacks McMaster 2026 · First overall',
     size: 2,
     tagline: 'A care dashboard for an adaptive ankle brace. First overall in 24 hours.',
-    links: [gh('biohacks-mcmaster')],
+    links: [gh('biohacks-mcmaster'), { label: 'Devpost', href: 'https://devpost.com/software/elevait' }],
     body: [
       'A care dashboard and data backend for an adaptive ankle-foot orthosis for ALS foot drop. It won first overall and the Wearables track at BioHacks McMaster 2026.',
       'On a team of four, I built all of the software: the live dashboard, the data backend, gait forecasting and AI reporting.',
@@ -178,7 +178,8 @@ export const stars = [
     size: 2,
     tagline: 'Six plugins that make an AI coding agent cheaper, quieter and more careful.',
     links: [
-      gh('gearshift'),
+      { label: 'npm', href: 'https://www.npmjs.com/~crystalflux' },
+      { label: 'gearshift', href: 'https://github.com/joezhuo2/gearshift' },
       { label: 'delegate-skills', href: 'https://github.com/joezhuo2/delegate-skills' },
       { label: 'stop-yap', href: 'https://github.com/joezhuo2/stop-yap' },
       { label: 'interrogate', href: 'https://github.com/joezhuo2/interrogate-skill' },
@@ -255,7 +256,7 @@ export const stars = [
     meta: 'Hack the Valley 11 · Python · Triton',
     size: 1,
     tagline: 'An autonomous agent that argues with itself to tune a GPU kernel.',
-    links: [gh('htv-papier-challenge')],
+    links: [gh('htv-papier-challenge'), { label: 'Devpost', href: 'https://devpost.com/software/research-war-room' }],
     body: [
       'Built solo for Hack the Valley 11. An autonomous research agent that tunes a fused matmul + bias + GELU Triton kernel under two competing lenses, Speed and Precision.',
     ],
@@ -313,6 +314,42 @@ export const stars = [
     facts: [
       'Configurable 12-tier grading system with adjustable demand multipliers',
       'Syncs to Supabase with a local fallback when offline',
+    ],
+  },
+  {
+    id: 'clashmate',
+    kind: 'Project',
+    title: 'ClashMate',
+    meta: 'Java · Greenfoot · Team of 3',
+    size: 1,
+    tagline: 'Chess, supercharged with Clash Royale elixir.',
+    links: [gh('Clashmate')],
+    body: [
+      'A two-player chess game where Clash Royale meets chess. Every piece moves as it does in normal chess, but each player also earns elixir every round and spends it on piece abilities.',
+      'Built with two teammates. I worked mostly on the pieces and the board: movement, abilities, blocks, bombs and promotion.',
+    ],
+    facts: [
+      'Each turn is a regular chess move, an elixir ability, or both',
+      'Promotions cost elixir instead of being free',
+      'Per-player timers, with the board held in a 2D grid',
+    ],
+  },
+  {
+    id: 'supermarket-simulation',
+    kind: 'Project',
+    title: 'Supermarket Simulation',
+    meta: 'Java · Greenfoot · Team of 5',
+    size: 1,
+    tagline: 'Two rival supermarkets, simulated shoppers and the occasional zombie.',
+    links: [gh('Supermarket-Simulation')],
+    body: [
+      'A simulation of two competing supermarkets sharing one world. Customers walk in, find their way along pathfinding nodes, pick products, queue at a cashier and leave.',
+      'Built with four teammates. I worked mostly on the customers, the stores and the simulation world that ties them together.',
+    ],
+    facts: [
+      'Shopper types that behave differently: regular, bargain, bulk and impulse',
+      'Day and night cycle with storms and restocking trucks',
+      'Zombie outbreaks that bring in soldiers',
     ],
   },
   {

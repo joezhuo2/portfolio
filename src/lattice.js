@@ -20,6 +20,8 @@ export const positions = [
   ...ring(11, 11, 0.2),
   ...ring(-1, 17, Math.PI / 5),
   ...ring(-13, 10, -0.15),
+  [-13, -8, -5],
+  [10.5, 6, -10.5],
   [-4, -28, 3],
 ]
 
@@ -27,7 +29,9 @@ const CROWN = 2
 const GIRDLE = 7
 const PAVILION = 12
 const TOP = 1
-const BOTTOM = 17
+const SHARD_LOW = 17
+const SHARD_HIGH = 18
+const BOTTOM = 19
 
 const full = [[0, TOP], [0, BOTTOM], [0, GIRDLE + 1], [0, CROWN + 3], [0, PAVILION + 4]]
 for (let i = 0; i < 5; i++) {
@@ -52,9 +56,18 @@ for (const [a, b] of full) {
   degree[b]++
 }
 
-export const edges = full.filter(([a, b]) => {
-  if (rnd() > 0.24 || degree[a] <= 3 || degree[b] <= 3) return true
-  degree[a]--
-  degree[b]--
-  return false
-})
+export const edges = full
+  .filter(([a, b]) => {
+    if (rnd() > 0.24 || degree[a] <= 3 || degree[b] <= 3) return true
+    degree[a]--
+    degree[b]--
+    return false
+  })
+  .concat([
+    [SHARD_LOW, GIRDLE + 2],
+    [SHARD_LOW, PAVILION + 2],
+    [SHARD_LOW, PAVILION + 3],
+    [SHARD_HIGH, CROWN + 4],
+    [SHARD_HIGH, GIRDLE + 4],
+    [SHARD_HIGH, GIRDLE + 3],
+  ])
