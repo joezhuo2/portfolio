@@ -741,6 +741,19 @@ body.is-title #home {
   transform: none;
 }
 
+#fly {
+  border-bottom: 0;
+  background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 0 1px;
+  transition:
+    background-size 0.45s var(--ease),
+    color 0.3s;
+}
+
+#fly:hover,
+#fly:focus-visible {
+  background-size: 100% 1px;
+}
+
 #panel footer {
   display: flex;
   justify-content: space-between;
