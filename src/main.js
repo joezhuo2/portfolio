@@ -518,7 +518,7 @@ canvas.addEventListener('pointermove', (e) => {
       body.classList.add('is-dragging')
       goal.theta -= dx * 0.005
       goal.phi = clamp(goal.phi - dy * 0.005, 0.3, Math.PI - 0.3)
-      speed = 5
+      speed = 2
       setHover(-1)
     }
   } else if (e.pointerType === 'mouse') {
