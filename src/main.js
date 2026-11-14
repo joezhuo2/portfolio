@@ -160,7 +160,7 @@ lattice.add(lines)
 const SIZES = [0, 5.5, 9, 14]
 const nodes = stars.map((star, i) => {
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, ...additive }))
-  sprite.position.copy(at(i))
+  sprite.position.copy(at(star.slot))
   lattice.add(sprite)
   return { sprite, base: SIZES[star.size], grow: 0, fade: 1 }
 })

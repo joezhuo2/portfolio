@@ -22,6 +22,7 @@ export const positions = [
   ...ring(-13, 10, -0.15),
   [-13, -8, -5],
   [10.5, 6, -10.5],
+  [-14, 6, -13],
   [-4, -28, 3],
 ]
 
@@ -31,7 +32,8 @@ const PAVILION = 12
 const TOP = 1
 const SHARD_LOW = 17
 const SHARD_HIGH = 18
-const BOTTOM = 19
+const SHARD_BACK = 19
+const BOTTOM = 20
 
 const full = [[0, TOP], [0, BOTTOM], [0, GIRDLE + 1], [0, CROWN + 3], [0, PAVILION + 4]]
 for (let i = 0; i < 5; i++) {
@@ -70,4 +72,7 @@ export const edges = full
     [SHARD_HIGH, CROWN + 4],
     [SHARD_HIGH, GIRDLE + 4],
     [SHARD_HIGH, GIRDLE + 3],
+    [SHARD_BACK, CROWN + 3],
+    [SHARD_BACK, CROWN + 2],
+    [SHARD_BACK, GIRDLE + 3],
   ])

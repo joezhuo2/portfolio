@@ -3,6 +3,7 @@ const gh = (repo) => ({ label: 'GitHub', href: `https://github.com/joezhuo2/${re
 export const stars = [
   {
     id: 'about',
+    slot: 0,
     kind: 'About',
     title: 'Joe Zhuo',
     meta: 'Markham, Ontario',
@@ -25,6 +26,7 @@ export const stars = [
   },
   {
     id: 'llm-inference-engine',
+    slot: 1,
     kind: 'Project',
     title: 'LLM Inference Engine',
     meta: 'C++20 · CUDA · cuBLAS',
@@ -45,6 +47,7 @@ export const stars = [
   },
   {
     id: 'crystal-os',
+    slot: 2,
     kind: 'Project',
     title: 'CrystalOS',
     meta: 'React · TypeScript · Rust · Tauri · Supabase',
@@ -64,6 +67,7 @@ export const stars = [
   },
   {
     id: 'anamnesis',
+    slot: 3,
     kind: 'Project',
     title: 'Anamnesis',
     meta: 'C# · Unity 6',
@@ -82,6 +86,7 @@ export const stars = [
   },
   {
     id: 'object-pool-linter',
+    slot: 4,
     kind: 'Project',
     title: 'ObjectPoolLinter',
     meta: 'C# · Roslyn · .NET',
@@ -99,26 +104,47 @@ export const stars = [
     ],
   },
   {
-    id: 'silver-owl-robotics',
+    id: 'team-3150a',
+    slot: 5,
     kind: 'Experience',
-    title: 'Silver Owl Robotics',
-    meta: 'Team Lead & Lead Builder · 2024 - Present',
+    title: 'VEX Team 3150A',
+    meta: 'Silver Owl Robotics · Team Lead & Lead Builder · Apr 2024 - Jun 2026',
     size: 3,
-    tagline: 'Led VEX Team 3150A to #1 in Ontario and #9 in the world for Robot Skills.',
+    tagline: 'Led a VEX robotics team to #1 in Ontario and #9 in the world for Robot Skills.',
     links: [],
     body: [
-      'Team Lead and Lead Builder of VEX Robotics Team 3150A in Richmond Hill, and part-time Facility Manager for the club.',
+      'Team Lead and Lead Builder of VEX Robotics Team 3150A at Silver Owl Robotics in Richmond Hill.',
       'I led a four-person build team to a #1 Ontario ranking, a #9 worldwide Robot Skills ranking out of 11,000+ teams, and 18 awards in one season, including an Excellence Award and an Event Championship at U.S. signature events.',
     ],
     facts: [
+      'Reached 219 of 238 Robot Skills points',
       'Scoring time cut 57% (1.65 s to 1.05 s) by redesigning the intake, with jams eliminated',
-      'Full-power run time extended 21% after cutting robot weight 9%',
-      'Ran 20+ hours of open club time a month and kept the shop tools alive',
-      'Now coaching this year’s five-member team',
+      'Full-power run time extended 21% (3:15 to 3:55) after cutting robot weight 9%',
+      'Rebuilt subsystems between events based on match performance',
+    ],
+  },
+  {
+    id: 'silver-owl-facilities',
+    slot: 19,
+    kind: 'Experience',
+    title: 'Silver Owl Robotics',
+    meta: 'Facilities Manager · Part-time · Nov 2025 - Oct 2026',
+    size: 1,
+    tagline: 'Kept a robotics club open, stocked and running for its student teams.',
+    links: [],
+    body: [
+      'Part-time Facilities Manager at Silver Owl Robotics, the club I competed with. I kept the space open and the tools working so student teams could build.',
+    ],
+    facts: [
+      'Ran 20+ hours of open club time a month',
+      'Repaired and replaced damaged tools, including roughly monthly band saw repairs',
+      'Coached Team 3150A’s five members as assistant coach',
+      'Staged four internal scrimmages, handling field layouts and fixing robots on the spot',
     ],
   },
   {
     id: 'waterloo',
+    slot: 6,
     kind: 'Education',
     title: 'University of Waterloo',
     meta: 'BASc Computer Engineering · 2026 - 2031',
@@ -136,6 +162,7 @@ export const stars = [
   },
   {
     id: 'tickr',
+    slot: 7,
     kind: 'Project',
     title: 'tickr',
     meta: 'Rust · Tauri 2 · Svelte 5',
@@ -154,6 +181,7 @@ export const stars = [
   },
   {
     id: 'elevait',
+    slot: 8,
     kind: 'Hackathon',
     title: 'Elevait',
     meta: 'BioHacks McMaster 2026 · First overall',
@@ -172,6 +200,7 @@ export const stars = [
   },
   {
     id: 'claude-code-toolkit',
+    slot: 9,
     kind: 'Project',
     title: 'Claude Code Toolkit',
     meta: 'JavaScript · Node.js',
@@ -200,6 +229,7 @@ export const stars = [
   },
   {
     id: 'omniscience',
+    slot: 10,
     kind: 'Project',
     title: 'Omniscience',
     meta: 'Rust · Tauri 2 · React 19',
@@ -217,6 +247,7 @@ export const stars = [
   },
   {
     id: 'crawde',
+    slot: 11,
     kind: 'Project',
     title: 'Crawde',
     meta: 'Rust · Tauri 2 · React 19',
@@ -234,6 +265,7 @@ export const stars = [
   },
   {
     id: 'islet',
+    slot: 12,
     kind: 'Project',
     title: 'islet',
     meta: 'Rust · Tauri 2 · Svelte 5',
@@ -251,6 +283,7 @@ export const stars = [
   },
   {
     id: 'research-war-room',
+    slot: 13,
     kind: 'Hackathon',
     title: 'Multi-POV Research War Room',
     meta: 'Hack the Valley 11 · Python · Triton',
@@ -268,6 +301,7 @@ export const stars = [
   },
   {
     id: 'money-makers',
+    slot: 14,
     kind: 'Hackathon',
     title: 'Money Makers',
     meta: 'Microsoft hackathon · Python · XGBoost',
@@ -286,6 +320,7 @@ export const stars = [
   },
   {
     id: 'unity-debug-log-viewer',
+    slot: 15,
     kind: 'Project',
     title: 'Unity Debug Log Viewer',
     meta: 'TypeScript · VS Code extension',
@@ -302,6 +337,7 @@ export const stars = [
   },
   {
     id: 'ingredient-tracker',
+    slot: 16,
     kind: 'Project',
     title: 'Ingredient Tracker',
     meta: 'React 19 · TypeScript · Supabase',
@@ -318,6 +354,7 @@ export const stars = [
   },
   {
     id: 'clashmate',
+    slot: 17,
     kind: 'Project',
     title: 'ClashMate',
     meta: 'Java · Greenfoot · Team of 3',
@@ -336,6 +373,7 @@ export const stars = [
   },
   {
     id: 'supermarket-simulation',
+    slot: 18,
     kind: 'Project',
     title: 'Supermarket Simulation',
     meta: 'Java · Greenfoot · Team of 5',
@@ -354,6 +392,7 @@ export const stars = [
   },
   {
     id: 'contact',
+    slot: 20,
     kind: 'Contact',
     title: 'Make Contact',
     meta: 'Open to summer 2027 internships',

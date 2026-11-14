@@ -4,7 +4,10 @@ import { stars } from './data.js'
 import { positions, edges } from './lattice.js'
 
 test('every star has a lattice slot and complete content', () => {
-  assert.equal(stars.length, positions.length)
+  assert.deepEqual(
+    stars.map((s) => s.slot).sort((a, b) => a - b),
+    positions.map((_, i) => i),
+  )
   assert.equal(new Set(stars.map((s) => s.id)).size, stars.length)
   for (const s of stars) {
     assert.ok(s.title && s.kind && s.tagline && s.body.length, s.id)
