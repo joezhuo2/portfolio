@@ -4,7 +4,7 @@ This is my portfolio, built as a 3D crystal constellation. Every star is somethi
 
 ## How it works
 
-- The home page fades in my name, a short description and the crystal. **Begin experience** flies out to the full sky.
+- The home page fades in my name, a short description and the crystal. **View my work** flies out to the full sky.
 - The constellation starts far away. Scroll or pinch to approach it, or use the hint at the bottom to fly in.
 - Drag to turn the crystal. Hover a star to read what it is, and click it to open the full story with links.
 - The left and right arrow keys move between stars, and Esc closes the panel.

@@ -305,21 +305,21 @@ function updateHint() {
   if (selected >= 0) {
     key = 'panel'
     hintHtml = coarse
-      ? 'Use <b>Prev</b> and <b>Next</b> to travel between stars'
-      : '<b>← →</b> travel between stars · <b>Esc</b> returns to the lattice'
+      ? 'Use <b>Prev</b> and <b>Next</b> to browse my work'
+      : '<b>← →</b> browse my work · <b>Esc</b> back to the overview'
   } else if (hovered >= 0) {
     key = `star${hovered}`
     hintHtml = `<b>${coarse ? 'Tap again' : 'Click'}</b> to open ${stars[hovered].title}`
   } else if (near) {
     key = 'near'
     hintHtml = coarse
-      ? 'Drag to turn the crystal · <b>Tap</b> a star to read its light'
-      : 'Drag to turn the crystal · <b>Hover</b> a star to read its light'
+      ? 'Drag to rotate · <b>Tap</b> a star to preview a project'
+      : 'Drag to rotate · <b>Hover</b> a star to preview a project'
   } else {
     key = 'far'
     hintHtml = coarse
-      ? '<b>Pinch</b> to approach the constellation'
-      : '<b>Scroll down</b> to approach the constellation'
+      ? '<b>Pinch</b> to explore my projects and experience'
+      : '<b>Scroll down</b> to explore my projects and experience'
   }
   fly.hidden = key !== 'far'
   if (key === hintKey) return
@@ -805,7 +805,7 @@ $('begin').addEventListener('click', async () => {
   const title = $('title')
   const warp = $('warp')
   const text = $('warp-text')
-  const phases = ['Aligning stars', 'Cutting facets', 'Opening the sky']
+  const phases = ['Gathering projects', 'Benchmarking results', 'Opening portfolio']
   title.classList.remove('show')
   reveal(warp)
   goal.r = farR

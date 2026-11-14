@@ -497,7 +497,7 @@ export const stars = [
     id: 'contact',
     slot: 20,
     kind: 'Contact',
-    title: 'Make Contact',
+    title: 'Contact Me',
     meta: 'Open to summer 2027 internships',
     size: 2,
     tagline: 'Looking for a summer 2027 co-op. Send a signal.',
