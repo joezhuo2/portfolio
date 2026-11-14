@@ -2,8 +2,6 @@
 
 This is my portfolio, built as a 3D crystal constellation. Every star is something I made, somewhere I worked or something about me.
 
-**Live site:** https://joe-zhuo.vercel.app
-
 ## How it works
 
 - The home page fades in my name, a short description and the crystal. **Begin experience** flies out to the full sky.
@@ -21,23 +19,9 @@ I wrote it from scratch with Vite and Three.js. `three` is the only runtime depe
 - The lattice comes from a seeded random generator. That keeps the crystal slightly imperfect but the same on every visit.
 - It works with touch: pinch to zoom, drag to turn, tap a star twice to open it.
 
-## Run it
+## Check it out
 
-```bash
-npm install
-```
-
-```bash
-npm run dev
-```
-
-```bash
-npm test
-```
-
-```bash
-npm run build
-```
+Check it out at https://joe-zhuo.vercel.app
 
 ## Where things live
 
