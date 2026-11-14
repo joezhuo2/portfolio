@@ -409,6 +409,7 @@ function fillPanel() {
 
 function open(i, dir = 0) {
   const fresh = selected < 0
+  zoomLeft = 0
   selected = (i + stars.length) % stars.length
   focusGoal.copy(nodes[selected].sprite.position)
   goal.r = 30 + stars[selected].size * 3
@@ -456,6 +457,7 @@ const spread = () => {
   const [a, b] = [...touches.values()]
   return Math.hypot(a.x - b.x, a.y - b.y)
 }
+let zoomLeft = 0
 const zoom = (factor) => {
   goal.r = clamp(goal.r * factor, 22, farR * 1.1)
   speed = 5
@@ -517,7 +519,8 @@ addEventListener(
   (e) => {
     if (mode !== 'live' || e.target.closest('#panel')) return
     e.preventDefault()
-    zoom(Math.exp(-e.deltaY * 0.0011))
+    zoomLeft = clamp(zoomLeft - e.deltaY * 0.0011, -1.6, 1.6)
+    speed = 5
   },
   { passive: false },
 )
@@ -567,6 +570,7 @@ panel.addEventListener('pointermove', (e) => {
 panel.addEventListener('pointerleave', () => panel.style.setProperty('--lit', 0))
 
 fly.addEventListener('click', () => {
+  zoomLeft = 0
   goal.r = arrive
   goal.theta += 2.2
   goal.phi = 1.25
@@ -591,6 +595,7 @@ $('home').addEventListener('click', () => {
   setHover(-1)
   mode = 'title'
   near = false
+  zoomLeft = 0
   goal.r = arrive * 2.1
   speed = 2
   body.classList.replace('is-live', 'is-title')
@@ -660,6 +665,11 @@ function frame(now) {
   const t = now / 1000
 
   if (!reduced && !drag && selected < 0 && hovered < 0) goal.theta += dt * 0.035
+  if (Math.abs(zoomLeft) > 0.0004) {
+    const step = zoomLeft * damp(dt, 4)
+    zoomLeft -= step
+    zoom(Math.exp(step))
+  }
   const k = damp(dt, speed)
   view.r += (goal.r - view.r) * k
   view.theta += (goal.theta - view.theta) * k
