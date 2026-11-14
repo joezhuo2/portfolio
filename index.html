@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500&family=JetBrains+Mono:wght@300;400&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/src/style.css" />
@@ -28,14 +28,10 @@
     </div>
 
     <main id="title" class="screen" hidden>
-      <div class="title-name">
-        <p class="mono eyebrow">A constellation in eighteen stars</p>
-        <h1>Joe<br /><em>Zhuo</em></h1>
-      </div>
-      <p class="lede">Computer engineer<br />Builder of fast things</p>
+      <h1>Joe<br /><em>Zhuo</em></h1>
+      <p class="lede">Computer engineer<span class="mono">AI Inference | Systems Programming</span></p>
       <div class="title-start">
         <button id="begin" class="cta" data-hover><span>Begin experience</span></button>
-        <p class="mono dim">Sound on for the full sky</p>
       </div>
     </main>
 
@@ -45,11 +41,12 @@
       <p class="mono dim" id="warp-text">Aligning stars</p>
     </div>
 
+    <header id="top">
+      <button id="home" class="mono ghost" data-hover aria-label="Back to title page">Joe Zhuo</button>
+      <button id="sound" class="mono ghost" data-hover aria-pressed="true">Sound on</button>
+    </header>
+
     <div id="hud" hidden>
-      <header>
-        <span class="mono brand">Joe Zhuo</span>
-        <button id="sound" class="mono ghost" data-hover aria-pressed="true">Sound on</button>
-      </header>
       <nav id="index" aria-label="Stars"></nav>
       <div id="card" role="tooltip" aria-hidden="true">
         <p class="mono card-kind"></p>

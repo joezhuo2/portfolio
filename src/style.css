@@ -3,7 +3,7 @@
   --ink: #f4f6f8;
   --dim: rgba(244, 246, 248, 0.5);
   --line: rgba(244, 246, 248, 0.16);
-  --serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --sans: 'Manrope', system-ui, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
   --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
 }
@@ -20,7 +20,7 @@ body {
   overflow: hidden;
   background: #000;
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
 }
@@ -132,20 +132,18 @@ button {
 #title {
   display: block;
   padding: 0;
+  pointer-events: none;
 }
 
-.title-name {
-  position: absolute;
-  top: clamp(4.5rem, 17vh, 11rem);
-  left: clamp(1.4rem, 9vw, 11rem);
-  text-align: left;
+#title button {
+  pointer-events: auto;
 }
 
 .title-start {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: clamp(1.4rem, 5vh, 3rem);
+  bottom: clamp(1rem, 3.5vh, 2.2rem);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -153,33 +151,37 @@ button {
 }
 
 #title h1 {
-  margin-top: 1.1rem;
-  font-weight: 300;
-  font-size: clamp(3.6rem, 10.5vw, 9.5rem);
-  line-height: 0.9;
-  letter-spacing: 0.08em;
+  position: absolute;
+  top: clamp(5rem, 17vh, 11rem);
+  left: clamp(1.4rem, 9vw, 11rem);
+  text-align: left;
+  font-weight: 500;
+  font-size: clamp(3rem, 8.5vw, 7.5rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
 #title h1 em {
-  font-style: italic;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--ink);
+  font-style: normal;
+  font-weight: 200;
 }
 
 .lede {
   position: absolute;
   right: clamp(1.4rem, 9vw, 11rem);
-  bottom: clamp(9.5rem, 21vh, 14rem);
+  bottom: clamp(7rem, 17vh, 10.5rem);
   text-align: right;
-  font-size: clamp(1.6rem, 4.4vw, 4.2rem);
+  font-size: clamp(1.15rem, 2.3vw, 2rem);
   font-weight: 300;
-  line-height: 1.05;
-  letter-spacing: 0.05em;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.eyebrow {
+.lede span {
+  display: block;
+  margin-top: 0.6rem;
   color: var(--accent);
 }
 
@@ -289,11 +291,33 @@ button {
   opacity: 1;
 }
 
-#hud header {
+#top {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.6rem clamp(1.2rem, 3vw, 2.4rem);
+  padding: 1.4rem clamp(1.2rem, 3vw, 2.4rem);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+body.is-title #top,
+body.is-live #top {
+  visibility: visible;
+  opacity: 1;
+}
+
+body.is-title #home {
+  visibility: hidden;
+}
+
+#home {
+  color: var(--ink);
 }
 
 #hud button,
@@ -376,16 +400,15 @@ button {
 
 .card-title {
   margin: 0.5rem 0 0.35rem;
-  font-size: 1.55rem;
-  font-weight: 400;
-  line-height: 1.1;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.2;
 }
 
 .card-tag {
-  font-size: 1.02rem;
-  font-style: italic;
+  font-size: 0.86rem;
   font-weight: 300;
-  line-height: 1.35;
+  line-height: 1.5;
   color: rgba(244, 246, 248, 0.78);
 }
 
@@ -503,9 +526,10 @@ button {
 
 #panel h2 {
   margin: 1.6rem 0 0.6rem;
-  font-size: clamp(2.2rem, 5vw, 3.1rem);
-  font-weight: 300;
-  line-height: 1;
+  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
   outline: none;
 }
 
@@ -566,9 +590,9 @@ button {
 }
 
 #panel-body p {
-  font-size: 1.22rem;
+  font-size: 0.98rem;
   font-weight: 300;
-  line-height: 1.5;
+  line-height: 1.7;
   margin-bottom: 1rem;
 }
 
@@ -678,7 +702,7 @@ button {
   }
 
   #panel-body p {
-    font-size: 1.1rem;
+    font-size: 0.94rem;
   }
 
   .mono {
