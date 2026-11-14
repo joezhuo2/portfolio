@@ -405,6 +405,33 @@ function fillPanel() {
   const bodyEl = $('panel-body')
   bodyEl.replaceChildren(...star.body.map((p) => el('p', p)), facts)
   bodyEl.scrollTop = 0
+  glide.active = false
+}
+
+const scroller = $('panel-body')
+const glide = { active: false, goal: 0, mid: 0, at: 0 }
+scroller.addEventListener(
+  'wheel',
+  (e) => {
+    if (reduced || e.ctrlKey) return
+    e.preventDefault()
+    if (!glide.active) glide.goal = glide.mid = glide.at = scroller.scrollTop
+    glide.active = true
+    const delta = e.deltaMode === 1 ? e.deltaY * 32 : e.deltaY
+    glide.goal = clamp(glide.goal + delta, 0, scroller.scrollHeight - scroller.clientHeight)
+  },
+  { passive: false },
+)
+
+function glideScroll(dt) {
+  if (!glide.active) return
+  glide.mid += (glide.goal - glide.mid) * damp(dt, 13)
+  glide.at += (glide.mid - glide.at) * damp(dt, 9)
+  if (Math.abs(glide.goal - glide.at) < 0.3) {
+    glide.at = glide.goal
+    glide.active = false
+  }
+  scroller.scrollTop = glide.at
 }
 
 function open(i, dir = 0) {
@@ -729,6 +756,7 @@ function frame(now) {
   placeCard()
   drawDust(dt)
   drawCursor(dt)
+  glideScroll(dt)
   requestAnimationFrame(frame)
 }
 requestAnimationFrame(frame)
