@@ -38,6 +38,14 @@ function starTex(rays, lengths) {
     g.fillStyle = bloom
     g.fillRect(-c, -c, w, w)
     g.globalCompositeOperation = 'lighter'
+    const halo = g.createRadialGradient(0, 0, 0, 0, 0, c * 0.75)
+    halo.addColorStop(0, 'rgba(255,255,255,1)')
+    halo.addColorStop(0.07, 'rgba(255,255,255,0.95)')
+    halo.addColorStop(0.2, 'rgba(160,238,255,0.32)')
+    halo.addColorStop(0.5, 'rgba(127,233,255,0.07)')
+    halo.addColorStop(1, 'rgba(127,233,255,0)')
+    g.fillStyle = halo
+    g.fillRect(-c, -c, w, w)
     const ring = g.createRadialGradient(0, 0, c * 0.3, 0, 0, c * 0.44)
     ring.addColorStop(0, 'rgba(127,233,255,0)')
     ring.addColorStop(0.5, 'rgba(127,233,255,0.045)')
