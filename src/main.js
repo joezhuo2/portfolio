@@ -292,6 +292,20 @@ function updateHint() {
 
 const el = (tag, text) => Object.assign(document.createElement(tag), { textContent: text })
 
+function factItem(fact) {
+  const href = /^\S+@\S+\.\S+$/.test(fact) ? `mailto:${fact}` : /^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(fact) ? `https://${fact}` : ''
+  if (!href) return el('li', fact)
+  const a = el('a', fact)
+  a.href = href
+  if (href.startsWith('http')) {
+    a.target = '_blank'
+    a.rel = 'noopener'
+  }
+  const li = document.createElement('li')
+  li.append(a)
+  return li
+}
+
 function fillPanel() {
   const star = stars[selected]
   $('panel-kind').textContent = star.kind
@@ -312,7 +326,7 @@ function fillPanel() {
     }),
   )
   const facts = document.createElement('ul')
-  facts.append(...star.facts.map((fact) => el('li', fact)))
+  facts.append(...star.facts.map(factItem))
   const bodyEl = $('panel-body')
   bodyEl.replaceChildren(...star.body.map((p) => el('p', p)), facts)
   bodyEl.scrollTop = 0

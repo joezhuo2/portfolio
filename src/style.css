@@ -604,6 +604,41 @@ body.is-title #home {
   transform: rotate(45deg);
 }
 
+#panel-body li a {
+  position: relative;
+  display: inline-block;
+  padding-right: 1.4em;
+  color: var(--ink);
+  text-decoration: none;
+  background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 0 1px;
+  transition:
+    background-size 0.45s var(--ease),
+    color 0.3s;
+}
+
+#panel-body li a::after {
+  content: '↗';
+  position: absolute;
+  right: 0.2em;
+  opacity: 0;
+  transform: translate(-6px, 6px);
+  transition:
+    opacity 0.3s,
+    transform 0.45s var(--ease);
+}
+
+#panel-body li a:hover,
+#panel-body li a:focus-visible {
+  color: var(--accent);
+  background-size: 100% 1px;
+}
+
+#panel-body li a:hover::after,
+#panel-body li a:focus-visible::after {
+  opacity: 1;
+  transform: none;
+}
+
 #panel footer {
   display: flex;
   justify-content: space-between;
