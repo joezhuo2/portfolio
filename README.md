@@ -1,17 +1,49 @@
 # portfolio
 
-Joe Zhuo's portfolio as a 3D crystal constellation. Each star is a project, an experience or something about me.
+This is my portfolio, built as a 3D crystal constellation. Every star is something I made, somewhere I worked or something about me.
 
-Built with Vite and Three.js. Sounds are synthesized in the browser with Web Audio.
+**Live site:** https://joe-zhuo.vercel.app
+
+## How it works
+
+- The home page fades in my name, a short description and the crystal. **Begin experience** flies out to the full sky.
+- The constellation starts far away. Scroll or pinch to approach it, or use the hint at the bottom to fly in.
+- Drag to turn the crystal. Hover a star to read what it is, and click it to open the full story with links.
+- The left and right arrow keys move between stars, and Esc closes the panel.
+- Bigger stars are the work I am proudest of.
+
+## How I built it
+
+I wrote it from scratch with Vite and Three.js. `three` is the only runtime dependency.
+
+- The stars, lines, nebula and background are all drawn in WebGL. I generate every texture on a canvas, so the site ships no image files.
+- I synthesize the sounds in the browser with Web Audio, so it ships no audio files either.
+- The lattice comes from a seeded random generator. That keeps the crystal slightly imperfect but the same on every visit.
+- It works with touch: pinch to zoom, drag to turn, tap a star twice to open it.
+
+## Run it
 
 ```bash
 npm install
+```
+
+```bash
 npm run dev
 ```
 
 ```bash
 npm test
+```
+
+```bash
 npm run build
 ```
 
-Edit the stars in `src/data.js`. The lattice shape lives in `src/lattice.js`, and a star's `size` (1 to 3) sets how large it is drawn.
+## Where things live
+
+- `src/data.js` holds every star: its title, links, description and `size` (1 to 3), plus the `slot` it takes on the lattice.
+- `src/lattice.js` holds the crystal's points and the lines between them.
+- `src/main.js` holds the scene, the camera and the interface.
+- `src/audio.js` holds the sounds.
+
+I deploy it on Vercel, and every push to `main` goes live.
