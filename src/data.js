@@ -117,7 +117,7 @@ export const stars = [
       'I led a four-person build team to a #1 Ontario ranking, a #9 worldwide Robot Skills ranking out of 11,000+ teams, and 18 awards in one season, including an Excellence Award and an Event Championship at U.S. signature events.',
     ],
     facts: [
-      'Reached 219 of 238 Robot Skills points',
+      'Reached 219/238 points on the Robot Skills Challenge',
       'Scoring time cut 57% (1.65 s to 1.05 s) by redesigning the intake, with jams eliminated',
       'Full-power run time extended 21% (3:15 to 3:55) after cutting robot weight 9%',
       'Rebuilt subsystems between events based on match performance',
