@@ -26,27 +26,53 @@ function texture(w, h, draw) {
   return t
 }
 
-const glowTex = texture(256, 256, (g, w) => {
-  const c = w / 2
-  const halo = g.createRadialGradient(c, c, 0, c, c, c)
-  halo.addColorStop(0, 'rgba(255,255,255,1)')
-  halo.addColorStop(0.07, 'rgba(255,255,255,0.95)')
-  halo.addColorStop(0.2, 'rgba(160,238,255,0.32)')
-  halo.addColorStop(0.5, 'rgba(127,233,255,0.07)')
-  halo.addColorStop(1, 'rgba(127,233,255,0)')
-  g.fillStyle = halo
-  g.fillRect(0, 0, w, w)
-  g.globalCompositeOperation = 'lighter'
-  for (const horizontal of [true, false]) {
-    const spike = horizontal ? g.createLinearGradient(0, 0, w, 0) : g.createLinearGradient(0, 0, 0, w)
-    spike.addColorStop(0, 'rgba(255,255,255,0)')
-    spike.addColorStop(0.5, 'rgba(255,255,255,0.75)')
-    spike.addColorStop(1, 'rgba(255,255,255,0)')
-    g.fillStyle = spike
-    if (horizontal) g.fillRect(0, c - 1, w, 2)
-    else g.fillRect(c - 1, 0, 2, w)
-  }
-})
+function starTex(rays, lengths) {
+  return texture(512, 512, (g, w) => {
+    const c = w / 2
+    g.translate(c, c)
+    const bloom = g.createRadialGradient(0, 0, 0, 0, 0, c)
+    const falloff = [[0, 1], [0.022, 1], [0.045, 0.72], [0.085, 0.34], [0.15, 0.15], [0.27, 0.06], [0.5, 0.018], [1, 0]]
+    for (const [stop, alpha] of falloff) {
+      bloom.addColorStop(stop, `rgba(${stop < 0.05 ? '255,255,255' : '176,232,255'},${alpha})`)
+    }
+    g.fillStyle = bloom
+    g.fillRect(-c, -c, w, w)
+    g.globalCompositeOperation = 'lighter'
+    const ring = g.createRadialGradient(0, 0, c * 0.3, 0, 0, c * 0.44)
+    ring.addColorStop(0, 'rgba(127,233,255,0)')
+    ring.addColorStop(0.5, 'rgba(127,233,255,0.045)')
+    ring.addColorStop(1, 'rgba(127,233,255,0)')
+    g.fillStyle = ring
+    g.fillRect(-c, -c, w, w)
+    for (let i = 0; i < rays; i++) {
+      const length = c * lengths[i % lengths.length]
+      const ray = g.createLinearGradient(0, 0, length, 0)
+      ray.addColorStop(0, 'rgba(255,255,255,0.95)')
+      ray.addColorStop(0.22, 'rgba(214,243,255,0.42)')
+      ray.addColorStop(1, 'rgba(127,233,255,0)')
+      g.save()
+      g.rotate((i / rays) * Math.PI * 2 - Math.PI / 2)
+      g.fillStyle = ray
+      g.beginPath()
+      g.moveTo(0, -c * 0.013)
+      g.lineTo(length, 0)
+      g.lineTo(0, c * 0.013)
+      g.closePath()
+      g.fill()
+      g.restore()
+    }
+  })
+}
+
+const STAR_TEX = [
+  starTex(4, [0.95]),
+  starTex(6, [0.85]),
+  starTex(8, [0.95, 0.45]),
+  starTex(5, [0.8]),
+  starTex(4, [0.95, 0.5]),
+  starTex(6, [0.9, 0.5]),
+]
+const STAR_TINTS = [0xffffff, 0xe4f5ff, 0xcfeeff]
 
 const ringTex = texture(128, 128, (g, w) => {
   g.strokeStyle = '#fff'
@@ -64,8 +90,9 @@ const dotTex = texture(64, 64, (g, w) => {
   const c = w / 2
   const d = g.createRadialGradient(c, c, 0, c, c, c)
   d.addColorStop(0, 'rgba(255,255,255,1)')
-  d.addColorStop(0.22, 'rgba(255,255,255,0.9)')
-  d.addColorStop(0.5, 'rgba(255,255,255,0.18)')
+  d.addColorStop(0.1, 'rgba(255,255,255,1)')
+  d.addColorStop(0.24, 'rgba(255,255,255,0.5)')
+  d.addColorStop(0.5, 'rgba(255,255,255,0.12)')
   d.addColorStop(1, 'rgba(255,255,255,0)')
   g.fillStyle = d
   g.fillRect(0, 0, w, w)
@@ -131,8 +158,10 @@ const sky = new THREE.Group()
 sky.add(
   field(3200, 4, 0.85, 500, 1500),
   field(700, 7, 0.9, 500, 1500),
-  field(220, 12, 1, 500, 1500),
-  field(40, 26, 1, 600, 1500),
+  field(120, 16, 1, 500, 1500, STAR_TEX[0]),
+  field(100, 16, 1, 500, 1500, STAR_TEX[1]),
+  field(22, 34, 1, 600, 1500, STAR_TEX[2]),
+  field(18, 30, 1, 600, 1500, STAR_TEX[3]),
 )
 for (let i = 0; i < 12; i++) {
   const tint = i % 3 === 0 ? 0x3f8fb5 : 0x27405e
@@ -157,9 +186,11 @@ const lines = new THREE.LineSegments(
 )
 lattice.add(lines)
 
-const SIZES = [3.6, 5.5, 9, 14]
+const SIZES = [4.8, 7.5, 12, 18.5]
 const nodes = stars.map((star, i) => {
-  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, ...additive }))
+  const material = new THREE.SpriteMaterial({ map: STAR_TEX[i % STAR_TEX.length], color: STAR_TINTS[i % 3], ...additive })
+  material.rotation = (((i * 37) % 30) - 15) * (Math.PI / 180)
+  const sprite = new THREE.Sprite(material)
   sprite.position.copy(at(star.slot))
   lattice.add(sprite)
   return { sprite, base: SIZES[star.size], grow: 0, fade: 1 }
@@ -627,7 +658,7 @@ function frame(now) {
   marker.material.opacity += ((lit >= 0 ? 0.9 : 0) - marker.material.opacity) * kg
   if (lit >= 0) {
     marker.position.copy(nodes[lit].sprite.position)
-    marker.scale.setScalar(nodes[lit].base * (0.62 + Math.sin(t * 3) * 0.04))
+    marker.scale.setScalar(nodes[lit].base * (0.48 + Math.sin(t * 3) * 0.03))
     marker.material.rotation = t * 0.5
   }
   sky.rotation.y += dt * 0.003
