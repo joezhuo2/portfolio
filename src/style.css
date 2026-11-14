@@ -155,16 +155,13 @@ button {
   top: clamp(5rem, 17vh, 11rem);
   left: clamp(1.4rem, 9vw, 11rem);
   text-align: left;
-  font-weight: 500;
-  font-size: clamp(3rem, 8.5vw, 7.5rem);
-  line-height: 0.95;
-  letter-spacing: 0.02em;
+  font-family: 'Playfair Display', 'Times New Roman', serif;
+  font-weight: 400;
+  font-size: clamp(2.3rem, 7vw, 6.5rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-}
-
-#title h1 em {
-  font-style: normal;
-  font-weight: 200;
+  white-space: nowrap;
 }
 
 .lede {
