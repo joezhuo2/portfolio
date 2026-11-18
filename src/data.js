@@ -32,6 +32,7 @@ export const stars = [
     meta: 'C++20 · CUDA · cuBLAS',
     size: 3,
     tagline: 'A from-scratch GPU inference engine that outruns llama.cpp on a laptop.',
+    demo: true,
     links: [gh('LLM-Inference-Engine'), { label: 'Live site', href: 'https://llm-inference-engine-jz.vercel.app/' }],
     body: [
       'A single-GPU LLM inference engine written from scratch in C++20 and CUDA. It serves a 1.1B-parameter model at 1,739 tokens per second with 16 concurrent requests on an RTX 5060 laptop GPU: 5.5x faster than HuggingFace and ahead of llama.cpp at 1,484.',
@@ -57,6 +58,7 @@ export const stars = [
     meta: 'Next.js · React 19 · Three.js',
     size: 1,
     tagline: 'The inference engine’s kernels, told as a 3D book you can page through.',
+    demo: true,
     links: [
       { label: 'Read it', href: 'https://llm-inference-engine-jz.vercel.app/every-byte' },
       gh('LLM-Inference-Engine'),
@@ -79,6 +81,7 @@ export const stars = [
     meta: 'React · TypeScript · Rust · Tauri · Supabase',
     size: 3,
     tagline: 'One desktop workspace for tasks, money, a terminal and an AI coding agent.',
+    demo: true,
     links: [gh('crystal-os')],
     body: [
       'A desktop workspace that brings tasks, calendar, finances, a terminal and an AI coding agent into one app, built with React, TypeScript and Rust on Tauri.',
@@ -195,6 +198,7 @@ export const stars = [
     meta: 'Rust · Tauri 2 · Svelte 5',
     size: 2,
     tagline: 'A system-tray stock ticker that idles at 7 MB.',
+    demo: true,
     links: [gh('tickr')],
     body: [
       'A lightweight stock ticker and trading practice app that lives in the Windows tray and the macOS menu bar. Quotes, charts, watchlists, alerts, candle-by-candle replay and simulated orders.',
@@ -366,6 +370,7 @@ export const stars = [
     meta: 'Rust · Tauri 2 · React 19',
     size: 1,
     tagline: 'A Dynamic Island-style system monitor that blooms into a dashboard.',
+    demo: true,
     links: [gh('omniscience')],
     body: [
       'A floating pill that shows CPU, RAM, GPU, disk and network as live rings, and expands into a full dashboard on hover. No admin rights, kernel drivers or third-party tools.',
@@ -385,6 +390,7 @@ export const stars = [
     meta: 'Rust · Tauri 2 · React 19',
     size: 1,
     tagline: 'A pixel crab that sits on your desktop and watches your Claude Code sessions.',
+    demo: true,
     links: [gh('crawde')],
     body: [
       'An always-on-top desktop companion with an animated pixel crab. It shows active chats, the current tool, running subagents, context usage and plan limits, and surfaces approvals and finished tasks.',
@@ -404,6 +410,7 @@ export const stars = [
     meta: 'Rust · egui · ffmpeg',
     size: 1,
     tagline: 'A tray file converter you drive by dragging a file onto a wheel.',
+    demo: true,
     links: [gh('crystal-converter')],
     body: [
       'A file converter for the Windows tray. Start dragging a file, hold a key, and a wheel of formats opens in the middle of the screen. Drop the file on a slice to convert it.',

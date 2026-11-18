@@ -1,5 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { existsSync } from 'node:fs'
 import { stars } from './data.js'
 import { positions, edges } from './lattice.js'
 
@@ -13,6 +14,7 @@ test('every star has a lattice slot and complete content', () => {
     assert.ok(s.title && s.kind && s.tagline && s.body.length, s.id)
     assert.ok([0, 1, 2, 3, 4].includes(s.size), s.id)
     for (const l of s.links) assert.match(l.href, /^(https:\/\/|mailto:)/, s.id)
+    if (s.demo) assert.ok(existsSync(new URL(`../public/demos/${s.id}.mp4`, import.meta.url)), s.id)
   }
 })
 

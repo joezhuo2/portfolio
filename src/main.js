@@ -403,7 +403,16 @@ function fillPanel() {
   const facts = document.createElement('ul')
   facts.append(...star.facts.map(factItem))
   const bodyEl = $('panel-body')
-  bodyEl.replaceChildren(...star.body.map((p) => el('p', p)), facts)
+  const media = []
+  if (star.demo) {
+    const video = document.createElement('video')
+    video.muted = video.loop = video.playsInline = video.controls = true
+    video.autoplay = !reduced
+    video.src = `demos/${star.id}.mp4`
+    video.setAttribute('aria-label', `${star.title} demo`)
+    media.push(video)
+  }
+  bodyEl.replaceChildren(...media, ...star.body.map((p) => el('p', p)), facts)
   bodyEl.scrollTop = 0
   glide.active = false
 }
