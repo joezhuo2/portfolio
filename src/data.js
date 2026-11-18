@@ -34,21 +34,21 @@ export const stars = [
     tagline: 'A from-scratch GPU inference engine that outruns llama.cpp on a laptop.',
     links: [gh('LLM-Inference-Engine'), { label: 'Live site', href: 'https://llm-inference-engine-jz.vercel.app/' }],
     body: [
-      'A single-GPU LLM inference engine written from scratch in C++20 and CUDA. It serves a 1.1B-parameter model at 1,402 tokens per second with 16 concurrent requests on an RTX 5060 laptop GPU: 3.4x faster than HuggingFace and ahead of llama.cpp at 1,154.',
+      'A single-GPU LLM inference engine written from scratch in C++20 and CUDA. It serves a 1.1B-parameter model at 1,739 tokens per second with 16 concurrent requests on an RTX 5060 laptop GPU: 5.5x faster than HuggingFace and ahead of llama.cpp at 1,484.',
       'Speed never bought a wrong answer. Every optimized kernel is checked against a naive oracle, and all 16 concurrent requests stay token-identical to running each one alone, even when memory fills and requests are paused.',
     ],
     facts: [
       'Paged KV cache and a continuous batching scheduler',
+      '12x the batch-1 throughput at 16 concurrent requests, ahead of llama.cpp at every batch size',
+      'Batch-1 decode runs at 93% of the GPU’s measured memory bandwidth',
+      'Picks the same token as HuggingFace at 99.57% of 1,842 checked positions',
       'GPU idle time during decoding cut from 11.3% to 0.9% with CUDA Graphs',
-      'Attention time per step cut from 883 to 272 µs with an online-softmax kernel',
-      'Time to first token on a 2,048-token prompt: 1,508 ms down to 203 ms',
+      'FlashAttention prefill kernel: time to first token on a 2,048-token prompt cut from 1,187 to 164 ms',
+      'Speculative decoding: 1.92x faster per token on repeat-heavy prompts and 1.3x on chat',
+      'Tensor-parallel split over 2 and 4 ranks matches the whole model on all 192 greedy tokens',
       'One script rebuilds, tests and re-measures every number in the README',
     ],
   },
-  {
-    id: 'crystal-os',
-    slot: 2,
-    kind: 'Project',
   {
     id: 'every-byte',
     slot: 27,
@@ -71,6 +71,10 @@ export const stars = [
       'A static Next.js export: the build fails if its numbers disagree with the results file',
     ],
   },
+  {
+    id: 'crystal-os',
+    slot: 2,
+    kind: 'Project',
     title: 'CrystalOS',
     meta: 'React · TypeScript · Rust · Tauri · Supabase',
     size: 3,
@@ -82,8 +86,9 @@ export const stars = [
     ],
     facts: [
       'Coding agent keeps answering through outages with failover across 4 model routes',
-      'Per-user Postgres Row Level Security and 49 allowlisted native commands',
-      '1,040 passing tests and 78 releases',
+      'Per-user Postgres Row Level Security and 70 allowlisted native commands',
+      'Trade journal built automatically from brokerage order emails in Gmail',
+      '1,830 passing tests, 94 releases and 600+ downloads',
       'Google Calendar and Obsidian vault integration, shipped as a self-updating installer',
     ],
   },
@@ -196,8 +201,9 @@ export const stars = [
       'Minimized, it unloads its web view and drops to about 7 MB in one process. A global hotkey brings it back already painted.',
     ],
     facts: [
-      '8 chart types and 20+ drawing tools, including Fibonacci, pitchforks and anchored VWAP',
-      '890 downloads across 126 releases',
+      '12 chart types and 20+ drawing tools, including Fibonacci, pitchforks and anchored VWAP',
+      'Window open: 7 processes and 132 MB. Tray only: 1 process and 7 MB',
+      '1,465 downloads across 150 releases',
       'Signed in-app updates through a GitHub Actions release workflow',
     ],
   },
@@ -365,9 +371,10 @@ export const stars = [
       'A floating pill that shows CPU, RAM, GPU, disk and network as live rings, and expands into a full dashboard on hover. No admin rights, kernel drivers or third-party tools.',
     ],
     facts: [
-      'Idles at about 45 MB of RAM and 0.1% CPU',
+      'Idles under 50 MB of RAM at about 0.1% CPU',
+      'CPU use under load cut from about 0.7% to 0.2% by calling Win32 directly and dropping a ring transition',
       'Reads Windows performance counters, Energy Meter counters and D3DKMT directly',
-      '44 releases',
+      '757 downloads across 46 releases, with an experimental macOS build',
     ],
   },
   {
@@ -385,7 +392,8 @@ export const stars = [
     facts: [
       'Local hook receiver bound to 127.0.0.1 with a bearer token and a 64 KiB payload cap',
       'Existing Claude hooks preserved through backups and a reversible install',
-      '36 releases with checksum-verified installers',
+      'Follows sessions in both Windows and WSL',
+      '37 releases, each with a SHA-256 checksum',
     ],
   },
   {
