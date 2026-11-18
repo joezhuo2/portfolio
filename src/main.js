@@ -447,6 +447,7 @@ function open(i, dir = 0) {
   const fresh = selected < 0
   zoomLeft = 0
   selected = (i + stars.length) % stars.length
+  history.replaceState(null, '', `#${stars[selected].id}`)
   focusGoal.copy(nodes[selected].sprite.position)
   goal.r = Math.max(30 + stars[selected].size * 3, nodes[selected].base * 1.3)
   speed = 3
@@ -475,6 +476,7 @@ function open(i, dir = 0) {
 function close() {
   if (selected < 0) return
   selected = -1
+  history.replaceState(null, '', location.pathname + location.search)
   focusGoal.set(0, 0, 0)
   goal.r = arrive
   sfx.close()
@@ -787,6 +789,16 @@ function countUp(target, ms, pad, onStep) {
 
 async function boot() {
   await Promise.race([document.fonts.ready, wait(1500)])
+  const linked = stars.findIndex((s) => s.id === location.hash.slice(1))
+  if (linked >= 0) {
+    introGoal = 1
+    body.classList.add('is-live')
+    reveal($('hud'))
+    mode = 'live'
+    addEventListener('pointerdown', initAudio, { once: true })
+    open(linked)
+    return
+  }
   body.classList.add('is-title', 'is-intro')
   reveal($('title'))
   mode = 'title'
