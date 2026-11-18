@@ -8,7 +8,6 @@ const { clamp, smoothstep } = THREE.MathUtils
 const ACCENT = 0x7fe9ff
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
 const coarse = matchMedia('(pointer: coarse)').matches
-const wait = (ms) => new Promise((r) => setTimeout(r, ms))
 const damp = (dt, rate) => 1 - Math.exp(-dt * rate)
 const reveal = (el, cls = 'show') => {
   el.hidden = false
@@ -219,8 +218,7 @@ let selected = -1
 let near = false
 let uiHover = false
 let speed = 5
-let intro = 0
-let introGoal = 0
+let intro = reduced ? 1 : 0.35
 let arrive = 96
 let nearR = 96
 let farR = 270
@@ -228,6 +226,27 @@ let farR = 270
 const body = document.body
 const card = $('card')
 const panel = $('panel')
+const sectionLinks = [...document.querySelectorAll('#sections a[href^="#"]')]
+const tours = [
+  { noun: 'stop', kinds: ['About', 'Education', 'Contact'] },
+  { noun: 'project', kinds: ['Project', 'Hackathon', 'Claude Code'] },
+  { noun: 'experience', kinds: ['Experience'] },
+].map((tour, index) => ({
+  ...tour,
+  link: sectionLinks[index],
+  entries: stars.map((star, i) => i)
+    .filter((i) => tour.kinds.includes(stars[i].kind))
+    .sort((a, b) => stars[a].slot - stars[b].slot),
+}))
+const tourOf = (i) => tours.find((tour) => tour.entries.includes(i))
+function neighbor(step) {
+  const entries = tourOf(selected).entries
+  return entries[(entries.indexOf(selected) + step + entries.length) % entries.length]
+}
+const introLabel = $('intro-label')
+const introDescription = $('intro-description')
+const homeLabel = introLabel.textContent
+const homeDescription = introDescription.textContent
 const hintText = $('hint-text')
 const fly = $('fly')
 const dust = $('dust')
@@ -245,7 +264,7 @@ function resize() {
   nearR = arrive * 1.5
   farR = arrive * 4.2
   if (mode === 'live') goal.r = clamp(goal.r, 22, farR * 1.1)
-  else if (mode !== 'warp') goal.r = arrive * 2.1
+  else goal.r = arrive * 1.65
   if (mode === 'loading') view.r = goal.r
   const dpr = Math.min(devicePixelRatio, 2)
   dust.width = w * dpr
@@ -263,7 +282,7 @@ function screenOf(i) {
 }
 
 function pick(x, y, slack = 1) {
-  if (mode !== 'live' || !near) return -1
+  if (mode !== 'title' && !near) return -1
   let best = -1
   let bestD = Infinity
   for (let i = 0; i < nodes.length; i++) {
@@ -292,43 +311,35 @@ function setHover(i) {
     card.querySelector('.card-title').textContent = star.title
     card.querySelector('.card-tag').textContent = star.tagline
     card.querySelector('.card-cta').textContent = coarse ? 'Tap again to open' : 'Click to open'
-    setLens(card, 'lens-card', 22)
+    if (mode === 'live') setLens(card, 'lens-card', 22)
   }
   syncCursor()
   updateHint()
 }
 
-let hintKey = ''
-let hintHtml = ''
+function previewTitle(star) {
+  return star.kind === 'Hackathon' ? `${star.title} (Hackathon)` : star.title
+}
+
 function updateHint() {
-  let key
-  if (selected >= 0) {
-    key = 'panel'
-    hintHtml = coarse
-      ? 'Use <b>Prev</b> and <b>Next</b> to browse my work'
-      : '<b>← →</b> browse my work · <b>Esc</b> back to the overview'
-  } else if (hovered >= 0) {
-    key = `star${hovered}`
-    hintHtml = `<b>${coarse ? 'Tap again' : 'Click'}</b> to open ${stars[hovered].title}`
-  } else if (near) {
-    key = 'near'
-    hintHtml = coarse
-      ? 'Drag to rotate · <b>Tap</b> a star to preview a project'
-      : 'Drag to rotate · <b>Hover</b> a star to preview a project'
-  } else {
-    key = 'far'
-    hintHtml = coarse
-      ? '<b>Pinch</b> to explore my projects and experience'
-      : '<b>Scroll down</b> to explore my projects and experience'
+  const star = stars[hovered]
+  if (mode === 'title') {
+    introLabel.textContent = star ? previewTitle(star) : homeLabel
+    introDescription.textContent = star ? star.tagline : homeDescription
+    return
   }
-  fly.hidden = key !== 'far'
-  if (key === hintKey) return
-  hintKey = key
-  hintText.classList.add('swap')
-  setTimeout(() => {
-    hintText.innerHTML = hintHtml
-    hintText.classList.remove('swap')
-  }, 280)
+  fly.hidden = near || !!star || selected >= 0
+  if (selected >= 0) {
+    hintText.textContent = 'Choose another section above, or close this panel to explore the stars.'
+  } else if (star) {
+    hintText.textContent = `${previewTitle(star)} · ${star.tagline}`
+  } else if (near) {
+    hintText.textContent = coarse
+      ? 'Drag to rotate. Tap a star to preview it, then tap again for details.'
+      : 'Drag to rotate. Hover or focus a star to preview it, then select it for details.'
+  } else {
+    hintText.textContent = 'Zoom in to explore individual stars, or choose a section above.'
+  }
 }
 
 const el = (tag, text) => Object.assign(document.createElement(tag), { textContent: text })
@@ -386,7 +397,15 @@ function fillPanel() {
   $('panel-kind').textContent = star.kind
   $('panel-title').textContent = star.title
   $('panel-meta').textContent = star.meta
-  $('panel-count').textContent = `${String(selected + 1).padStart(2, '0')} / ${stars.length}`
+  const tour = tourOf(selected)
+  $('panel-count').textContent = `${tour.entries.indexOf(selected) + 1} / ${tour.entries.length}`
+  $('prev').textContent = '← Previous'
+  $('prev').setAttribute('aria-label', `Previous ${tour.noun}: ${previewTitle(stars[neighbor(-1)])}`)
+  $('next').textContent = `Next ${tour.noun} → ${previewTitle(stars[neighbor(1)])}`
+  for (const section of tours) {
+    if (section === tour) section.link.setAttribute('aria-current', 'true')
+    else section.link.removeAttribute('aria-current')
+  }
   $('panel-links').replaceChildren(
     ...star.links.map((link) => {
       const a = el('a', `${link.label} ↗`)
@@ -443,39 +462,48 @@ function glideScroll(dt) {
   scroller.scrollTop = glide.at
 }
 
+function enterConstellation() {
+  mode = 'live'
+  $('title').hidden = true
+  $('title').classList.remove('show')
+  body.classList.remove('is-title')
+  body.classList.add('is-live')
+  reveal($('hud'))
+}
+
 function open(i, dir = 0) {
   const fresh = selected < 0
+  if (mode !== 'live') enterConstellation()
   zoomLeft = 0
-  selected = (i + stars.length) % stars.length
-  history.replaceState(null, '', `#${stars[selected].id}`)
-  focusGoal.copy(nodes[selected].sprite.position)
-  goal.r = Math.max(30 + stars[selected].size * 3, nodes[selected].base * 1.3)
-  speed = 3
-  hovered = -1
-  syncCursor()
+  selected = i
+  history.replaceState(null, '', `#${stars[i].id}`)
+  focusGoal.copy(nodes[i].sprite.position)
+  goal.r = Math.max(30 + stars[i].size * 3, nodes[i].base * 1.3)
+  speed = 7
+  setHover(-1)
   body.classList.add('panel-open')
+  $('index').inert = true
+  if (dir < 0) sfx.prev()
+  else if (dir > 0) sfx.next()
+  else sfx.open(i)
+  fillPanel()
   if (fresh) {
-    sfx.open(selected)
-    fillPanel()
+    panel.inert = false
     reveal(panel)
     setLens(panel, 'lens-panel', 36)
-    $('panel-title').focus({ preventScroll: true })
-  } else {
-    if (dir < 0) sfx.prev()
-    else if (dir > 0) sfx.next()
-    else sfx.open(selected)
-    panel.classList.add('swap')
-    setTimeout(() => {
-      fillPanel()
-      panel.classList.remove('swap')
-    }, 250)
   }
+  if (!dir) $('panel-title').focus({ preventScroll: true })
   updateHint()
 }
 
 function close() {
   if (selected < 0) return
+  const link = tourOf(selected).link
+  link.removeAttribute('aria-current')
   selected = -1
+  $('index').inert = false
+  panel.inert = true
+  link.focus({ preventScroll: true })
   history.replaceState(null, '', location.pathname + location.search)
   focusGoal.set(0, 0, 0)
   goal.r = arrive
@@ -502,7 +530,7 @@ const zoom = (factor) => {
 }
 
 canvas.addEventListener('pointerdown', (e) => {
-  if (mode !== 'live') return
+  if (selected >= 0) return
   canvas.setPointerCapture(e.pointerId)
   touches.set(e.pointerId, { x: e.clientX, y: e.clientY })
   if (touches.size === 1) drag = { x: e.clientX, y: e.clientY, moved: 0 }
@@ -513,7 +541,7 @@ canvas.addEventListener('pointerdown', (e) => {
 })
 
 canvas.addEventListener('pointermove', (e) => {
-  if (mode !== 'live') return
+  if (selected >= 0) return
   if (touches.has(e.pointerId)) touches.set(e.pointerId, { x: e.clientX, y: e.clientY })
   if (touches.size === 2) {
     const d = spread()
@@ -542,7 +570,7 @@ function release(e, tapped) {
   if (drag && tapped && drag.moved <= 6) {
     const touch = e.pointerType !== 'mouse'
     const i = pick(e.clientX, e.clientY, touch ? 1.6 : 1)
-    if (i >= 0 && (!touch || i === hovered)) open(i)
+    if (i >= 0 && (mode === 'title' || !touch || i === hovered)) open(i)
     else setHover(i)
   }
   drag = null
@@ -555,7 +583,7 @@ canvas.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && !dra
 addEventListener(
   'wheel',
   (e) => {
-    if (mode !== 'live' || e.target.closest('#panel')) return
+    if (mode !== 'live' || selected >= 0 || e.target.closest('#top')) return
     e.preventDefault()
     zoomLeft = clamp(zoomLeft - e.deltaY * 0.0011, -1.6, 1.6)
     speed = 5
@@ -591,14 +619,18 @@ document.addEventListener('pointerover', (e) => {
 })
 
 addEventListener('keydown', (e) => {
-  if (mode !== 'live') return
-  if (e.key === 'ArrowRight') open(selected + 1, 1)
-  else if (e.key === 'ArrowLeft') open(selected < 0 ? -1 : selected - 1, -1)
-  else if (e.key === 'Escape') close()
+  if (selected < 0) return
+  if (e.key === 'Escape') return close()
+  if (e.target.closest('video') || e.altKey || e.ctrlKey || e.metaKey) return
+  const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
+  if (step) {
+    e.preventDefault()
+    open(neighbor(step), step)
+  }
 })
 
-$('prev').addEventListener('click', () => open(selected - 1, -1))
-$('next').addEventListener('click', () => open(selected + 1, 1))
+$('prev').addEventListener('click', () => open(neighbor(-1), -1))
+$('next').addEventListener('click', () => open(neighbor(1), 1))
 $('panel-close').addEventListener('click', close)
 panel.addEventListener('pointermove', (e) => {
   const box = panel.getBoundingClientRect()
@@ -608,14 +640,20 @@ panel.addEventListener('pointermove', (e) => {
 })
 panel.addEventListener('pointerleave', () => panel.style.setProperty('--lit', 0))
 
-fly.addEventListener('click', () => {
+function explore() {
+  if (mode !== 'live') enterConstellation()
+  $('home').focus({ preventScroll: true })
+  setHover(-1)
   zoomLeft = 0
   goal.r = arrive
-  goal.theta += 2.2
+  goal.theta += 0.35
   goal.phi = 1.25
-  speed = 1.5
+  speed = 7
   sfx.descend()
-})
+  updateHint()
+}
+fly.addEventListener('click', explore)
+$('begin').addEventListener('click', explore)
 
 $('sound').addEventListener('click', (e) => {
   const on = e.currentTarget.getAttribute('aria-pressed') !== 'true'
@@ -634,15 +672,12 @@ $('home').addEventListener('click', () => {
   mode = 'title'
   near = false
   zoomLeft = 0
-  goal.r = arrive * 2.1
-  speed = 2
+  goal.r = arrive * 1.65
+  speed = 7
   body.classList.replace('is-live', 'is-title')
-  const hud = $('hud')
-  hud.classList.remove('show')
-  setTimeout(() => {
-    if (mode !== 'live') hud.hidden = true
-  }, 1400)
   reveal($('title'))
+  updateHint()
+  sectionLinks[0].focus({ preventScroll: true })
 })
 
 $('index').append(
@@ -686,7 +721,7 @@ function drawCursor(dt) {
 }
 
 function placeCard() {
-  const show = hovered >= 0 && hovered !== selected
+  const show = mode === 'live' && hovered >= 0 && selected < 0
   card.classList.toggle('show', show)
   if (!show) return
   const p = screenOf(hovered)
@@ -708,11 +743,11 @@ function frame(now) {
     zoomLeft -= step
     zoom(Math.exp(step))
   }
-  const k = damp(dt, speed)
+  const k = reduced ? 1 : damp(dt, speed)
   view.r += (goal.r - view.r) * k
   view.theta += (goal.theta - view.theta) * k
   view.phi += (goal.phi - view.phi) * k
-  focus.lerp(focusGoal, damp(dt, 3.5))
+  focus.lerp(focusGoal, reduced ? 1 : damp(dt, 7))
   if (!reduced) {
     pointer.sx += (pointer.nx - pointer.sx) * damp(dt, 2.5)
     pointer.sy += (pointer.ny - pointer.sy) * damp(dt, 2.5)
@@ -722,7 +757,7 @@ function frame(now) {
   camera.lookAt(focus)
 
   const wide = innerWidth > 720
-  const ks = damp(dt, 4)
+  const ks = reduced ? 1 : damp(dt, 7)
   shift.x += ((selected >= 0 && wide ? Math.min(460, innerWidth) / 2 : 0) - shift.x) * ks
   shift.y += ((selected >= 0 && !wide ? innerHeight * 0.3 : 0) - shift.y) * ks
   if (shift.x > 0.5 || shift.y > 0.5) camera.setViewOffset(innerWidth, innerHeight, shift.x, shift.y, innerWidth, innerHeight)
@@ -741,7 +776,7 @@ function frame(now) {
     }
   }
 
-  intro += (introGoal - intro) * damp(dt, 2.2)
+  intro += (1 - intro) * damp(dt, 8)
   motesNear.material.opacity = 0.6 * intro
   const kg = damp(dt, 9)
   nodes.forEach((node, i) => {
@@ -772,67 +807,27 @@ function frame(now) {
 }
 requestAnimationFrame(frame)
 
-function countUp(target, ms, pad, onStep) {
-  return new Promise((resolve) => {
-    const start = performance.now()
-    const step = (now) => {
-      const p = Math.min((now - start) / ms, 1)
-      const eased = 1 - (1 - p) ** 3
-      target.textContent = String(Math.round(eased * 100)).padStart(pad, '0')
-      onStep?.(eased)
-      if (p < 1) requestAnimationFrame(step)
-      else resolve()
-    }
-    requestAnimationFrame(step)
+for (const link of sectionLinks) {
+  link.addEventListener('click', (event) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    event.preventDefault()
+    open(stars.findIndex((star) => star.id === link.hash.slice(1)))
   })
 }
 
-async function boot() {
-  await Promise.race([document.fonts.ready, wait(1500)])
-  const linked = stars.findIndex((s) => s.id === location.hash.slice(1))
-  if (linked >= 0) {
-    introGoal = 1
-    body.classList.add('is-live')
-    reveal($('hud'))
-    mode = 'live'
-    addEventListener('pointerdown', initAudio, { once: true })
-    open(linked)
-    return
-  }
-  body.classList.add('is-title', 'is-intro')
-  reveal($('title'))
-  mode = 'title'
-  await wait(reduced ? 0 : 800)
-  introGoal = 1
-  await wait(3200)
-  body.classList.remove('is-intro')
+addEventListener('pointerdown', initAudio, { once: true })
+function openLinkedStar() {
+  const linked = stars.findIndex((star) => star.id === location.hash.slice(1))
+  if (linked < 0) return false
+  open(linked)
+  return true
 }
-
-$('begin').addEventListener('click', async () => {
-  if (mode !== 'title') return
-  mode = 'warp'
-  initAudio()
-  sfx.begin()
-  const title = $('title')
-  const warp = $('warp')
-  const text = $('warp-text')
-  const phases = ['Gathering projects', 'Benchmarking results', 'Opening portfolio']
-  title.classList.remove('show')
-  reveal(warp)
-  goal.r = farR
-  goal.theta += 2.4
-  speed = 0.9
-  await countUp($('warp-count'), reduced ? 800 : 3000, 2, (p) => (text.textContent = phases[Math.min(2, Math.floor(p * 3))]))
-  title.hidden = true
-  body.classList.replace('is-title', 'is-live')
-  warp.classList.remove('show')
-  reveal($('hud'))
-  mode = 'live'
-  speed = 5
-  sfx.arrive()
-  updateHint()
-  await wait(900)
-  warp.hidden = true
+addEventListener('hashchange', () => {
+  if (!openLinkedStar()) close()
 })
-
-boot()
+if (!openLinkedStar()) {
+  mode = 'title'
+  body.classList.add('is-title')
+  reveal($('title'))
+  reveal($('hud'))
+}

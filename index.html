@@ -18,23 +18,21 @@
     <canvas id="scene" aria-hidden="true"></canvas>
     <canvas id="dust" aria-hidden="true"></canvas>
 
-    <main id="title" class="screen" hidden>
-      <h1>Joe Zhuo</h1>
-      <p class="lede">Computer engineering<span class="mono">AI Inference | Systems Programming</span></p>
-      <div class="title-start">
-        <button id="begin" class="cta" data-hover><span>View my work</span></button>
-      </div>
-    </main>
-
-    <div id="warp" class="screen" hidden>
-      <div class="orbit" aria-hidden="true"><i></i><i></i><i></i></div>
-      <p class="mono"><span id="warp-count">00</span>%</p>
-      <p class="mono dim" id="warp-text">Gathering projects</p>
-    </div>
-
     <header id="top">
-      <button id="home" class="mono ghost" data-hover aria-label="Back to title page">Joe Zhuo</button>
+      <div class="nav-start">
+        <button id="home" class="mono ghost" data-hover aria-label="Back to title page">Joe Zhuo</button>
+        <nav id="sections" aria-label="Portfolio">
+          <a href="#about" data-hover>About</a>
+          <a href="#llm-inference-engine" data-hover>Projects</a>
+          <a href="#team-3150a" data-hover>Experience</a>
+        </nav>
+      </div>
       <div class="top-actions">
+        <a class="icon-btn" href="/resume.pdf" target="_blank" rel="noopener" aria-label="Résumé" title="Résumé" data-hover>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path d="M4.5 2h7l4 4v12h-11zM11.5 2v4h4M7 10h6M7 13h5"/>
+          </svg>
+        </a>
         <a class="icon-btn" href="https://github.com/joezhuo2" target="_blank" rel="noopener" aria-label="GitHub profile" title="GitHub" data-hover>
           <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
             <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
@@ -56,6 +54,17 @@
       </div>
     </header>
 
+    <main id="title" class="screen" hidden>
+      <h1>Joe Zhuo</h1>
+      <div class="lede">
+        <p class="mono" id="intro-label">Computer engineering · Waterloo</p>
+        <p id="intro-description">I build GPU inference engines and systems software. Choose a section above for a guided tour, or select a star to explore my work.</p>
+      </div>
+      <div class="title-start">
+        <button id="begin" class="cta" data-hover><span>Explore constellation</span></button>
+      </div>
+    </main>
+
     <div id="hud" hidden>
       <nav id="index" aria-label="Stars"></nav>
       <div id="card" role="tooltip" aria-hidden="true">
@@ -67,7 +76,7 @@
       <div id="hint">
         <span class="hint-line" aria-hidden="true"></span>
         <p class="mono" aria-live="polite"><span id="hint-text"></span></p>
-        <button id="fly" class="mono ghost" data-hover>Or jump straight in</button>
+        <button id="fly" class="mono ghost" data-hover>Zoom to the stars</button>
       </div>
     </div>
 
@@ -84,9 +93,9 @@
       </header>
       <div id="panel-body"></div>
       <footer>
-        <button id="prev" class="mono ghost" data-hover aria-label="Previous star">← Prev</button>
+        <button id="prev" class="mono ghost" data-hover>← Previous</button>
         <span class="mono dim" id="panel-count"></span>
-        <button id="next" class="mono ghost" data-hover aria-label="Next star">Next →</button>
+        <button id="next" class="mono ghost" data-hover>Next →</button>
       </footer>
     </aside>
 

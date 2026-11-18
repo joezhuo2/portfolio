@@ -31,7 +31,7 @@ export const stars = [
     title: 'LLM Inference Engine',
     meta: 'C++20 · CUDA · cuBLAS',
     size: 3,
-    tagline: 'A from-scratch GPU inference engine that outruns llama.cpp on a laptop.',
+    tagline: 'A C++ and CUDA engine that serves a 1.1B model at 1,739 tokens per second across 16 concurrent requests on a laptop GPU.',
     demo: true,
     links: [gh('LLM-Inference-Engine'), { label: 'Live site', href: 'https://llm-inference-engine-jz.vercel.app/' }],
     body: [
