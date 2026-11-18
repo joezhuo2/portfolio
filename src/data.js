@@ -7,7 +7,7 @@ export const stars = [
     kind: 'About',
     title: 'Joe Zhuo',
     meta: 'Markham, Ontario',
-    size: 3,
+    size: 4,
     tagline: 'Computer engineering student who makes software run fast on real hardware.',
     links: [
       { label: 'GitHub', href: 'https://github.com/joezhuo2' },
@@ -49,6 +49,28 @@ export const stars = [
     id: 'crystal-os',
     slot: 2,
     kind: 'Project',
+  {
+    id: 'every-byte',
+    slot: 27,
+    kind: 'Project',
+    title: 'Every Byte',
+    meta: 'Next.js · React 19 · Three.js',
+    size: 1,
+    tagline: 'The inference engine’s kernels, told as a 3D book you can page through.',
+    links: [
+      { label: 'Read it', href: 'https://llm-inference-engine-jz.vercel.app/every-byte' },
+      gh('LLM-Inference-Engine'),
+    ],
+    body: [
+      'A book that lives on the LLM Inference Engine’s site, with one chapter per kernel and engine technique. It opens as a 3D book and walks from decoding a single token to paged attention, CUDA Graphs, FlashAttention prefill, speculative decoding and tensor parallelism.',
+      'Each chapter is drawn from the engine’s recorded data, so the before and after numbers on the page are the measured ones.',
+    ],
+    facts: [
+      '19 chapters, each with numbered steps, a workbench, review questions and exercises',
+      'Closes with estimates, errata and a section on what lies beyond the engine',
+      'A static Next.js export: the build fails if its numbers disagree with the results file',
+    ],
+  },
     title: 'CrystalOS',
     meta: 'React · TypeScript · Rust · Tauri · Supabase',
     size: 3,

@@ -194,7 +194,7 @@ const lines = new THREE.LineSegments(
 )
 lattice.add(lines)
 
-const SIZES = [4.8, 7.5, 12, 18.5]
+const SIZES = [4.8, 7.5, 12, 18.5, 54]
 const nodes = stars.map((star, i) => {
   const material = new THREE.SpriteMaterial({ map: STAR_TEX[i % STAR_TEX.length], color: STAR_TINTS[i % 3], ...additive })
   material.rotation = (((i * 37) % 30) - 15) * (Math.PI / 180)
@@ -221,7 +221,7 @@ let uiHover = false
 let speed = 5
 let intro = 0
 let introGoal = 0
-let arrive = 64
+let arrive = 96
 let nearR = 96
 let farR = 270
 
@@ -241,7 +241,7 @@ function resize() {
   camera.aspect = w / h
   camera.updateProjectionMatrix()
   const fit = Math.max(1, 0.85 / camera.aspect)
-  arrive = 64 * fit
+  arrive = 96 * fit
   nearR = arrive * 1.5
   farR = arrive * 4.2
   if (mode === 'live') goal.r = clamp(goal.r, 22, farR * 1.1)
@@ -439,7 +439,7 @@ function open(i, dir = 0) {
   zoomLeft = 0
   selected = (i + stars.length) % stars.length
   focusGoal.copy(nodes[selected].sprite.position)
-  goal.r = 30 + stars[selected].size * 3
+  goal.r = Math.max(30 + stars[selected].size * 3, nodes[selected].base * 1.3)
   speed = 3
   hovered = -1
   syncCursor()

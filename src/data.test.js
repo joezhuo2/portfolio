@@ -11,7 +11,7 @@ test('every star has a lattice slot and complete content', () => {
   assert.equal(new Set(stars.map((s) => s.id)).size, stars.length)
   for (const s of stars) {
     assert.ok(s.title && s.kind && s.tagline && s.body.length, s.id)
-    assert.ok([0, 1, 2, 3].includes(s.size), s.id)
+    assert.ok([0, 1, 2, 3, 4].includes(s.size), s.id)
     for (const l of s.links) assert.match(l.href, /^(https:\/\/|mailto:)/, s.id)
   }
 })
