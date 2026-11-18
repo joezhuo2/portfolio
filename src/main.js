@@ -609,16 +609,6 @@ fly.addEventListener('click', () => {
 $('sound').addEventListener('click', (e) => {
   const on = e.currentTarget.getAttribute('aria-pressed') !== 'true'
   e.currentTarget.setAttribute('aria-pressed', on)
-  const label = e.currentTarget.firstElementChild
-  label.textContent = on ? 'Sound on' : 'Sound off'
-  if (!reduced)
-    label.animate(
-      [
-        { opacity: 0, transform: 'translateY(6px)' },
-        { opacity: 1, transform: 'none' },
-      ],
-      { duration: 900, easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)' },
-    )
   setMuted(!on)
   if (on) {
     initAudio()
