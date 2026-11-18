@@ -102,7 +102,7 @@ export const stars = [
     title: 'Anamnesis',
     meta: 'C# · Unity 6',
     size: 3,
-    tagline: 'A wave-based action RPG that holds 120 FPS under 200 projectiles.',
+    tagline: 'A wave-based action RPG that holds 120 FPS with 200+ projectiles on screen.',
     links: [gh('Anamnesis'), { label: 'CrystalFlux-Core', href: 'https://github.com/joezhuo2/CrystalFlux-Core' }],
     body: [
       'A solo-built wave-based action RPG in Unity 6, with 80+ attacks, 40+ status effects, a 261-node skill tree and multi-phase bosses, all authored as data.',
