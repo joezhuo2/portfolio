@@ -66,6 +66,9 @@ for (const moon of MOONS) positions.push(positions[HUB].map((v, i) => v + moon[i
 const BOOK = positions.length
 positions.push(positions[TOP].map((v, i) => v + [-4.5, -2, 3.5][i]))
 
+const DESIGN = positions.length
+positions.push(positions[GIRDLE].map((v, i) => v + [6, -4, 5][i]))
+
 const SPREAD = 1.5
 for (const p of positions) for (let i = 0; i < 3; i++) p[i] *= SPREAD
 
@@ -94,4 +97,6 @@ export const edges = full
     [SHARD_BACK, GIRDLE + 3],
     ...MOONS.map((_, i) => [HUB, FIRST_MOON + i]),
     [TOP, BOOK],
+    [GIRDLE, DESIGN],
+    [DESIGN, PAVILION],
   ])

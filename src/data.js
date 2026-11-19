@@ -213,6 +213,27 @@ export const stars = [
     ],
   },
   {
+    id: 'crystal-design',
+    slot: 28,
+    kind: 'Project',
+    title: 'Crystal Design',
+    meta: 'React · TypeScript · SVG',
+    size: 2,
+    tagline: 'Liquid glass components and motion effects for React.',
+    links: [
+      { label: 'Playground', href: 'https://crystal-design.vercel.app/#/surface-glass' },
+      gh('crystal-design'),
+    ],
+    body: [
+      'A React library of liquid glass components and motion effects. Its buttons, menus and dialogs share a glass surface that bends the background along its edges.',
+    ],
+    facts: [
+      'Try 31 components and 21 effects in the playground, tune their settings and copy the React code.',
+      'SVG displacement maps create refraction in Chromium. Safari and Firefox use a frosted blur.',
+      'Install the full library or just the components you use.',
+    ],
+  },
+  {
     id: 'omniscience',
     slot: 10,
     kind: 'Project',

@@ -132,7 +132,7 @@ const cloudTex = texture(256, 256, (g, w) => {
 
 const canvas = $('scene')
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5))
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 5000)
 
@@ -260,10 +260,8 @@ function resize() {
   if (mode === 'live') goal.r = clamp(goal.r, 22, farR * 1.1)
   else goal.r = arrive * 1.65
   if (mode === 'loading') view.r = goal.r
-  const dpr = Math.min(devicePixelRatio, 2)
-  dust.width = w * dpr
-  dust.height = h * dpr
-  dustCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
+  dust.width = w
+  dust.height = h
 }
 addEventListener('resize', resize)
 addEventListener('resize', () => selected >= 0 && setLens(panel, 'lens-panel', 36))
@@ -305,7 +303,6 @@ function setHover(i) {
     card.querySelector('.card-title').textContent = star.title
     card.querySelector('.card-tag').textContent = star.tagline
     card.querySelector('.card-cta').textContent = coarse ? 'Tap again to open' : 'Click to open'
-    setLens(card, 'lens-card', 22)
   }
   syncCursor()
   updateHint()
@@ -336,6 +333,7 @@ const el = (tag, text) => Object.assign(document.createElement(tag), { textConte
 
 const lensSizes = {}
 function setLens(target, id, bezel) {
+  if (innerWidth <= 720) return
   const w = target.offsetWidth
   const h = target.offsetHeight
   if (!w || !h || lensSizes[id] === `${w}x${h}`) return
@@ -497,6 +495,8 @@ function close() {
   selected = -1
   $('index').inert = false
   panel.inert = true
+  scroller.querySelector('video')?.pause()
+  glide.active = false
   link.focus({ preventScroll: true })
   history.replaceState(null, '', location.pathname + location.search)
   focusGoal.set(0, 0, 0)
@@ -504,9 +504,14 @@ function close() {
   sfx.close()
   body.classList.remove('panel-open')
   panel.classList.remove('show')
-  setTimeout(() => {
-    if (selected < 0) panel.hidden = true
-  }, 700)
+  const slide = panel.getAnimations().find((animation) => animation.transitionProperty === 'transform')
+  if (slide) {
+    slide.finished.then(() => {
+      if (selected < 0) panel.hidden = true
+    }, () => {}) // Reopening the panel cancels its exit.
+  } else {
+    panel.hidden = true
+  }
   updateHint()
 }
 
@@ -590,7 +595,7 @@ addEventListener('pointermove', (e) => {
   pointer.y = e.clientY
   pointer.nx = (e.clientX / innerWidth) * 2 - 1
   pointer.ny = (e.clientY / innerHeight) * 2 - 1
-  if (reduced || e.pointerType !== 'mouse') return
+  if (reduced || drag || e.pointerType !== 'mouse') return
   for (let i = 0; i < 2 && motes.length < 160; i++) {
     motes.push({
       x: e.clientX + (Math.random() - 0.5) * 8,
@@ -685,6 +690,7 @@ $('index').append(
 )
 
 function drawDust(dt) {
+  if (!motes.length) return
   dustCtx.clearRect(0, 0, innerWidth, innerHeight)
   for (let i = motes.length - 1; i >= 0; i--) {
     const m = motes[i]
@@ -714,13 +720,20 @@ function drawCursor(dt) {
   cursorRing.style.setProperty('--y', `${pointer.ry}px`)
 }
 
+let cardWidth = 0
+let cardHeight = 0
+new ResizeObserver(([entry]) => {
+  cardWidth = entry.target.offsetWidth
+  cardHeight = entry.target.offsetHeight
+}).observe(card)
+
 function placeCard() {
   const show = hovered >= 0 && selected < 0
   card.classList.toggle('show', show)
   if (!show) return
   const p = screenOf(hovered)
-  const w = card.offsetWidth
-  const h = card.offsetHeight
+  const w = cardWidth
+  const h = cardHeight
   const x = p.x + 28 + w > innerWidth - 12 ? p.x - 28 - w : p.x + 28
   card.style.transform = `translate(${clamp(x, 12, innerWidth - w - 12)}px, ${clamp(p.y - h / 2, 76, innerHeight - h - 130)}px)`
 }
@@ -755,7 +768,7 @@ function frame(now) {
   shift.x += ((selected >= 0 && wide ? Math.min(460, innerWidth) / 2 : 0) - shift.x) * ks
   shift.y += ((selected >= 0 && !wide ? innerHeight * 0.3 : 0) - shift.y) * ks
   if (shift.x > 0.5 || shift.y > 0.5) camera.setViewOffset(innerWidth, innerHeight, shift.x, shift.y, innerWidth, innerHeight)
-  else if (camera.view) camera.clearViewOffset()
+  else if (camera.view?.enabled) camera.clearViewOffset()
 
   if (mode === 'live') {
     const isNear = view.r < nearR
