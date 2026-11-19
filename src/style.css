@@ -158,6 +158,7 @@ button {
   text-wrap: pretty;
 }
 body.is-title #hint { display: none; }
+body.is-title #hud { z-index: 21; }
 
 .cta {
   position: relative;
@@ -234,8 +235,6 @@ body.is-live #top {
   opacity: 1;
   transform: none;
 }
-
-body.is-title #home { display: none; }
 
 .nav-start, #sections, #sections a {
   display: flex;
@@ -853,7 +852,6 @@ body.is-title #home { display: none; }
   .nav-start { display: contents; }
   #sections { order: 3; width: 100%; gap: clamp(0.8rem, 4vw, 1.5rem); }
   .top-actions { margin-left: auto; }
-  body.is-title #home { display: block; }
   #title h1 { top: max(6.5rem, 17vh); }
   .lede { width: min(21rem, calc(100vw - 3rem)); bottom: 5.7rem; }
   .title-start { bottom: 1rem; }

@@ -234,19 +234,13 @@ const tours = [
 ].map((tour, index) => ({
   ...tour,
   link: sectionLinks[index],
-  entries: stars.map((star, i) => i)
-    .filter((i) => tour.kinds.includes(stars[i].kind))
-    .sort((a, b) => stars[a].slot - stars[b].slot),
+  entries: stars.map((star, i) => i).filter((i) => tour.kinds.includes(stars[i].kind)),
 }))
 const tourOf = (i) => tours.find((tour) => tour.entries.includes(i))
+let route = stars.map((star, i) => i)
 function neighbor(step) {
-  const entries = tourOf(selected).entries
-  return entries[(entries.indexOf(selected) + step + entries.length) % entries.length]
+  return route[(route.indexOf(selected) + step + route.length) % route.length]
 }
-const introLabel = $('intro-label')
-const introDescription = $('intro-description')
-const homeLabel = introLabel.textContent
-const homeDescription = introDescription.textContent
 const hintText = $('hint-text')
 const fly = $('fly')
 const dust = $('dust')
@@ -311,7 +305,7 @@ function setHover(i) {
     card.querySelector('.card-title').textContent = star.title
     card.querySelector('.card-tag').textContent = star.tagline
     card.querySelector('.card-cta').textContent = coarse ? 'Tap again to open' : 'Click to open'
-    if (mode === 'live') setLens(card, 'lens-card', 22)
+    setLens(card, 'lens-card', 22)
   }
   syncCursor()
   updateHint()
@@ -323,11 +317,7 @@ function previewTitle(star) {
 
 function updateHint() {
   const star = stars[hovered]
-  if (mode === 'title') {
-    introLabel.textContent = star ? previewTitle(star) : homeLabel
-    introDescription.textContent = star ? star.tagline : homeDescription
-    return
-  }
+  if (mode === 'title') return
   fly.hidden = near || !!star || selected >= 0
   if (selected >= 0) {
     hintText.textContent = 'Choose another section above, or close this panel to explore the stars.'
@@ -398,10 +388,10 @@ function fillPanel() {
   $('panel-title').textContent = star.title
   $('panel-meta').textContent = star.meta
   const tour = tourOf(selected)
-  $('panel-count').textContent = `${tour.entries.indexOf(selected) + 1} / ${tour.entries.length}`
+  $('panel-count').textContent = `${route.indexOf(selected) + 1} / ${route.length}`
   $('prev').textContent = '← Previous'
-  $('prev').setAttribute('aria-label', `Previous ${tour.noun}: ${previewTitle(stars[neighbor(-1)])}`)
-  $('next').textContent = `Next ${tour.noun} → ${previewTitle(stars[neighbor(1)])}`
+  $('prev').setAttribute('aria-label', `Previous ${tourOf(neighbor(-1)).noun}: ${previewTitle(stars[neighbor(-1)])}`)
+  $('next').textContent = `Next ${tourOf(neighbor(1)).noun} → ${previewTitle(stars[neighbor(1)])}`
   for (const section of tours) {
     if (section === tour) section.link.setAttribute('aria-current', 'true')
     else section.link.removeAttribute('aria-current')
@@ -476,6 +466,10 @@ function open(i, dir = 0) {
   if (mode !== 'live') enterConstellation()
   zoomLeft = 0
   selected = i
+  if (!dir) {
+    const { entries } = tourOf(i)
+    route = [...entries, ...stars.map((star, s) => s).filter((s) => !entries.includes(s))]
+  }
   history.replaceState(null, '', `#${stars[i].id}`)
   focusGoal.copy(nodes[i].sprite.position)
   goal.r = Math.max(30 + stars[i].size * 3, nodes[i].base * 1.3)
@@ -721,7 +715,7 @@ function drawCursor(dt) {
 }
 
 function placeCard() {
-  const show = mode === 'live' && hovered >= 0 && selected < 0
+  const show = hovered >= 0 && selected < 0
   card.classList.toggle('show', show)
   if (!show) return
   const p = screenOf(hovered)
