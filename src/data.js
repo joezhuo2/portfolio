@@ -100,6 +100,7 @@ export const stars = [
     meta: 'Rust · egui · OpenGL',
     size: 2,
     tagline: 'A native code editor laid out like VS Code, in one executable.',
+    demo: true,
     links: [gh('halo'), { label: 'Download', href: 'https://github.com/joezhuo2/halo/releases/latest' }],
     body: [
       'An ultra-lightweight code editor written in Rust with egui on OpenGL. No Electron and no web view: it ships as one executable with an explorer, a multi-cursor editor, a terminal, source control and a panel for the Claude and Codex CLIs.',
