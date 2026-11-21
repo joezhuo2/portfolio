@@ -69,6 +69,9 @@ positions.push(positions[TOP].map((v, i) => v + [-4.5, -2, 3.5][i]))
 const DESIGN = positions.length
 positions.push(positions[GIRDLE].map((v, i) => v + [6, -4, 5][i]))
 
+const HALO = positions.length
+positions.push(positions[CROWN + 2].map((v, i) => v + [-5, 4, 4][i]))
+
 const SPREAD = 1.5
 for (const p of positions) for (let i = 0; i < 3; i++) p[i] *= SPREAD
 
@@ -99,4 +102,5 @@ export const edges = full
     [TOP, BOOK],
     [GIRDLE, DESIGN],
     [DESIGN, PAVILION],
+    [CROWN + 2, HALO],
   ])

@@ -93,6 +93,27 @@ export const stars = [
     ],
   },
   {
+    id: 'halo',
+    slot: 29,
+    kind: 'Project',
+    title: 'Halo',
+    meta: 'Rust · egui · OpenGL',
+    size: 2,
+    tagline: 'A native code editor laid out like VS Code, in one executable.',
+    links: [gh('halo'), { label: 'Download', href: 'https://github.com/joezhuo2/halo/releases/latest' }],
+    body: [
+      'An ultra-lightweight code editor written in Rust with egui on OpenGL. No Electron and no web view: it ships as one executable with an explorer, a multi-cursor editor, a terminal, source control and a panel for the Claude and Codex CLIs.',
+      'With a folder, a file and a terminal open, it uses about 100 MB.',
+    ],
+    facts: [
+      'Language server support: diagnostics, completion, go to definition, rename and quick fixes',
+      'Syntax highlighting for 68 languages, with split editors, a minimap and code folding',
+      'Source control with a commit graph, plus pull requests through the gh CLI',
+      'Builds for Windows, Linux and macOS from one GitHub Actions workflow',
+      'Updates itself in the background after checking the release’s SHA-256',
+    ],
+  },
+  {
     id: 'elevait',
     slot: 8,
     kind: 'Hackathon',
